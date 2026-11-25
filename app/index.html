@@ -6,13 +6,18 @@
 <meta name="description" content="나날노트 앱 화면을 미리 써 보세요">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="나날노트">
-<meta property="og:title" content="나날노트 앱 미리보기">
-<meta property="og:description" content="나날노트 앱 화면을 미리 써 보세요">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="나날노트 — 말하면, 정리됩니다">
+<meta property="og:description" content="말로 대답하면 AI가 정리하는 나의 노트. 가족에게는 허락한 것만 보여요.">
 <meta property="og:url" content="https://xn--910bqa26dz54h.com/app/">
-<meta property="og:image" content="https://xn--910bqa26dz54h.com/og.png">
+<meta property="og:image" content="https://xn--910bqa26dz54h.com/og.png?v=2">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="나날노트 로고와 소개 — 말하면, 정리됩니다">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="나날노트 — 말하면, 정리됩니다">
+<meta name="twitter:description" content="말로 대답하면 AI가 정리하는 나의 노트. 가족에게는 허락한 것만 보여요.">
+<meta name="twitter:image" content="https://xn--910bqa26dz54h.com/og.png?v=2">
 <meta name="theme-color" content="#1C3632">
 <link rel="manifest" href="/app/manifest.webmanifest">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -203,6 +208,20 @@ const ic=(id,s=24)=>`<svg width="${s}" height="${s}" aria-hidden="true"><use hre
 const blank=()=>({v:3,asked:[],profile:{name:'',family:'',consent:{care:false,funeral:false}},items:[],chat:[],days:[],familyMsgs:[],pending:null,mood:null,tts:false,proxies:['',''],after:null});
 // 체험 모드(?demo): 예시 어르신 노트로 시작하고, 실제 노트와 따로 저장
 const DEMO=new URLSearchParams(location.search).has('demo'),KEY=DEMO?'nanal-demo':'nanal';
+// 체험 모드 안내: 위쪽 띠 + '둘러보기' 목록 (실제 앱 화면은 그대로)
+const TOUR=[['#home','오늘','오늘 기분, 가족 응원 글'],['#talk','대화','말하면 노트에 적혀요'],['#note-assets','보험 전화번호','노트의 보험 칸에 대표번호 버튼'],['#check','주간 확인','AI가 적은 게 맞는지 확인'],['#worry','고민 상담','저장되지 않는 대화'],['#family','가족 화면','켜 둔 칸만 가족에게'],['/network/?c=ins','보험사 번호 찾기','회사 이름으로 찾아 전화'],['/network/?c=hospital','가까운 병원','지도에서 가까운 순으로']];
+function demoBar(){document.title='나날노트 체험';document.head.insertAdjacentHTML('beforeend','<style>.top{top:48px}</style>');
+  document.body.insertAdjacentHTML('afterbegin',`<div id="demoBar" style="background:#C9A96E;color:#1A1F1E;font:500 14px 'Noto Sans KR',sans-serif;display:flex;align-items:center;gap:8px;height:48px;padding:0 8px 0 14px;position:sticky;top:0;z-index:50"><span style="flex:1">체험용 예시 노트예요</span><button id="tourBtn" style="font:700 14px 'Noto Sans KR',sans-serif;border:0;border-radius:999px;background:#1C3632;color:#F4F0E8;min-height:36px;padding:0 14px;cursor:pointer">둘러보기</button></div>
+  <div id="tour" hidden style="position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.45);display:flex;align-items:flex-end"><div style="background:#FBF9F4;color:#1A1F1E;width:100%;max-height:85vh;overflow:auto;border-radius:20px 20px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));font-family:'Noto Sans KR',sans-serif">
+   <div style="display:flex;align-items:center;margin-bottom:6px"><b style="font-size:19px;flex:1">무엇을 볼까요?</b><button id="tourX" aria-label="닫기" style="border:0;background:none;font-size:26px;cursor:pointer;min-width:44px;min-height:44px">×</button></div>
+   <p style="margin:0 0 10px;color:#575D5B;font-size:14.5px">예시 어르신 '순자 어머님'의 24일째 노트예요. 마음대로 눌러 보셔도 실제 노트와는 따로 저장돼요.</p>
+   ${TOUR.map(([h,t,d],i)=>`<a href="${h.startsWith('#')?h:h}" ${h.startsWith('#')?'':'target="_blank" rel="noopener"'} data-tour style="display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:center;padding:9px 4px;border-top:1px solid #DDD4C4;text-decoration:none;color:inherit"><i style="font-style:normal;width:34px;height:34px;border-radius:50%;background:#1C3632;color:#F4F0E8;display:grid;place-items:center;font-weight:700">${i+1}</i><span><b style="font-size:17px">${t}</b><br><small style="color:#575D5B;font-size:14px">${d}</small></span></a>`).join('')}
+   <button id="tourReset" style="margin-top:12px;width:100%;min-height:48px;border:1px solid #1C3632;border-radius:10px;background:transparent;color:#1C3632;font:500 15.5px 'Noto Sans KR',sans-serif;cursor:pointer">예시 노트 처음 상태로</button></div></div>`);
+  const t=document.getElementById('tour'),open=v=>{t.hidden=!v;t.style.display=v?'flex':'none'};open(false);
+  document.getElementById('tourBtn').onclick=()=>open(true);document.getElementById('tourX').onclick=()=>open(false);
+  t.onclick=e=>{if(e.target===t||e.target.closest('[data-tour]'))open(false)};
+  document.getElementById('tourReset').onclick=()=>{try{localStorage.removeItem(KEY)}catch(_){}location.hash='#home';location.reload()};
+  let seen=false;try{seen=!!sessionStorage.getItem('tourSeen');sessionStorage.setItem('tourSeen','1')}catch(_){}if(!seen)setTimeout(()=>open(true),600)}
 function demoData(){const ago=n=>new Date(Date.now()-n*864e5).toISOString().slice(0,10);
   const it=(module,field,value,status,visible,n)=>({id:'d'+module+field.length+n,module,field,value,quote:value,certainty:'확실',status,visible,at:ago(n)});
   const d=blank();d.profile={name:'순자 어머님',family:'큰아들 민수, 딸 지영',since:ago(24),consent:{care:true,funeral:true}};
@@ -609,7 +628,7 @@ window.addEventListener('hashchange',()=>{if(location.hash==='#check')ci=0;rende
       if(db&&uid){ref=db.doc('data/users/'+uid+'/nanal');const snap=await ref.get();if(snap.exists)S=Object.assign(blank(),snap.data())}else local();
     }else local();
   }catch(e){}
-  if(DEMO){document.body.insertAdjacentHTML('afterbegin','<div style="background:#C9A96E;color:#1A1F1E;font:500 13.5px Noto Sans KR,sans-serif;text-align:center;padding:6px 10px">체험용 예시 노트예요 · 실제 노트와 따로 저장돼요</div>');document.title='나날노트 체험'}
+  if(DEMO)demoBar();
   if(!dict)dict=webDict();if(!tts)tts=webTts();wireDict();
   {const n=(S.items||[]).length;S.items=(S.items||[]).filter(i=>modOf(i.module));if(S.pending&&!modOf(S.pending.module))S.pending=null;if(n!==S.items.length)setTimeout(save,0)}
   if(!S.profile.since)S.profile.since=S.days[0]||today();if(!S.asked)S.asked=[];S.v=3;applyFs();
