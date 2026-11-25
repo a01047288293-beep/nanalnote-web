@@ -138,6 +138,7 @@ html.fs1{zoom:1.12}html.fs2{zoom:1.25}
 h1,h2,h3,p,li,label,.q,.big{word-break:keep-all;overflow-wrap:anywhere}h1,h2,h3,.q{text-wrap:balance}
 .nlogo{width:auto;display:block;flex:none}
 .near{text-decoration:none;color:inherit;border-color:var(--gold)}
+.afterBox summary{cursor:pointer;font-size:17px;font-weight:500;list-style:none;display:flex;justify-content:space-between}.afterBox summary::after{content:'+';color:var(--gold);font-size:22px}.afterBox[open] summary::after{content:'–'}.afterBox #afterCard{border:0;padding:0;margin-top:10px;box-shadow:none;background:none}
 .insc{background:var(--mint);border-radius:12px;padding:12px 14px;display:grid;gap:10px;margin-top:6px}.insc .r{display:grid;gap:6px}.insc b{font-size:17px}.insc .acts{display:flex;gap:8px;flex-wrap:wrap}.insc .btn{min-height:48px;font-size:16px;padding:0 14px}.insc small{font-size:13.5px;color:var(--soft)}
 .worryCard{text-decoration:none;color:inherit;border-left:3px solid var(--gold)}
 .helpc{background:var(--mint);border-radius:12px;padding:14px 16px;display:grid;gap:10px;font-size:16px}.helpc .row{gap:8px;display:grid;grid-template-columns:1fr}.helpc .btn{min-height:50px;font-size:16px}
@@ -214,7 +215,7 @@ function demoBar(){document.title='나날노트 체험';document.head.insertAdja
   document.body.insertAdjacentHTML('afterbegin',`<div id="demoBar" style="background:#C9A96E;color:#1A1F1E;font:500 14px 'Noto Sans KR',sans-serif;display:flex;align-items:center;gap:8px;height:48px;padding:0 8px 0 14px;position:sticky;top:0;z-index:50"><span style="flex:1">체험용 예시 노트예요</span><button id="tourBtn" style="font:700 14px 'Noto Sans KR',sans-serif;border:0;border-radius:999px;background:#1C3632;color:#F4F0E8;min-height:36px;padding:0 14px;cursor:pointer">둘러보기</button></div>
   <div id="tour" hidden style="position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.45);display:flex;align-items:flex-end"><div style="background:#FBF9F4;color:#1A1F1E;width:100%;max-height:85vh;overflow:auto;border-radius:20px 20px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));font-family:'Noto Sans KR',sans-serif">
    <div style="display:flex;align-items:center;margin-bottom:6px"><b style="font-size:19px;flex:1">무엇을 볼까요?</b><button id="tourX" aria-label="닫기" style="border:0;background:none;font-size:26px;cursor:pointer;min-width:44px;min-height:44px">×</button></div>
-   <p style="margin:0 0 10px;color:#575D5B;font-size:14.5px">예시 어르신 '순자 어머님'의 24일째 노트예요. 마음대로 눌러 보셔도 실제 노트와는 따로 저장돼요.</p>
+   <p style="margin:0 0 10px;color:#575D5B;font-size:15px">예시 노트예요. 마음껏 눌러 보세요.</p>
    ${TOUR.map(([h,t,d],i)=>`<a href="${h.startsWith('#')?h:h}" ${h.startsWith('#')?'':'target="_blank" rel="noopener"'} data-tour style="display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:center;padding:9px 4px;border-top:1px solid #DDD4C4;text-decoration:none;color:inherit"><i style="font-style:normal;width:34px;height:34px;border-radius:50%;background:#1C3632;color:#F4F0E8;display:grid;place-items:center;font-weight:700">${i+1}</i><span><b style="font-size:17px">${t}</b><br><small style="color:#575D5B;font-size:14px">${d}</small></span></a>`).join('')}
    <button id="tourReset" style="margin-top:12px;width:100%;min-height:48px;border:1px solid #1C3632;border-radius:10px;background:transparent;color:#1C3632;font:500 15.5px 'Noto Sans KR',sans-serif;cursor:pointer">예시 노트 처음 상태로</button></div></div>`);
   const t=document.getElementById('tour'),open=v=>{t.hidden=!v;t.style.display=v?'flex':'none'};open(false);
@@ -232,7 +233,7 @@ function demoData(){const ago=n=>new Date(Date.now()-n*864e5).toISOString().slic
    it('family','가족에게 남기는 말','너희 덕분에 행복했다. 서로 아끼며 살아라','미확인',false,1)];
   d.chat=[{role:'ai',text:'어머님, 들어 두신 보험이 있으세요? 어느 회사인지 기억나세요?',date:ago(1)},{role:'me',text:'삼성생명 종신보험 하나랑 우체국 보험 있어',date:ago(1)},{role:'chip',text:'재산 지도 · 보험에 적었어요',date:ago(1)},{role:'chip',text:'삼성생명·우체국보험 대표번호를 노트에 붙여 두었어요',date:ago(1)},{role:'ai',text:'잘 적어 두었어요. 가족분들이 나중에 헤매지 않으실 거예요.',date:ago(1)}];
   d.familyMsgs=[{text:'엄마, 이번 주말에 지영이랑 갈게요. 맛있는 거 사 갈게요!',date:ago(1)}];
-  d.proxies=['큰아들 민수','딸 지영'];return d}
+  d.pending={module:'living',field:'집 열쇠·반려동물'};d.proxies=['큰아들 민수','딸 지영'];return d}
 let S=blank(),ref=null,sample=null,dict=null,tts=null,loaded=false,saving=false,again=false,busy=false,typing=false,ci=0,ob={step:0,name:'',family:''};
 const V=document.getElementById('view');
 
@@ -297,10 +298,9 @@ function home(){
   V.innerHTML=`<div class="hello"><div class="ring">${ring()}<b>${total()}%</b><small>나날노트</small></div><div><p class="muted">${esc(new Date().toLocaleDateString('ko-KR',{month:'long',day:'numeric',weekday:'long'}))}</p><h1>${esc(S.profile.name)},<br>안녕하세요</h1></div></div>
   ${S.after&&S.after.reported&&!S.after.opened?`<div class="card" style="border-color:var(--red)"><span class="lab" style="color:var(--red)">확인해 주세요</span><p style="font-size:19px">가족이 나날노트 공개 절차를 시작했어요. 괜찮으시면 아래를 눌러 주세요. 바로 취소됩니다.</p><button class="btn pri" id="alive">저 괜찮아요 — 취소하기</button></div>`:''}
   <div class="card forest"><span class="lab">오늘의 이야기${nf?' · '+esc(modOf(nf.module).name):''}</span><p class="q">${esc(q)}</p><a class="btn pri" href="#talk">${ic('i-mic',26)}말로 대답하기</a></div>
-  <a class="card worryCard" href="#worry"><span class="lab">고민 상담</span><p style="font-size:19px;margin:0">마음이 무거운 날엔 그냥 이야기하세요. 저장되지 않아요.</p></a>
   <div class="card"><span class="lab">오늘 기분</span><div class="mood">${[['좋음','i-sun'],['보통','i-cloud'],['힘듦','i-heart']].map(([v,i])=>`<button data-m="${v}" aria-pressed="${md===v}">${ic(i,26)}${v==='좋음'?'좋아요':v==='보통'?'그저 그래요':'힘들어요'}</button>`).join('')}</div></div>
   ${msg?`<div class="card"><span class="lab">가족의 응원</span><p style="font-size:19px">${esc(msg.text)}</p></div>`:''}
-  <div class="card stat"><div><b>${S.days.length}</b><span>대화한 날</span></div><div><b>${S.items.length}</b><span>적힌 항목</span></div><div><b>${pend().length}</b><span>확인 대기</span></div></div>`;
+`;
   const al=document.getElementById('alive');if(al)al.onclick=()=>{S.after=null;save();home()};
   V.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{S.mood={date:today(),val:b.dataset.m};save();home();if(b.dataset.m==='힘듦'){location.hash='#worry'}});
 }
@@ -424,7 +424,7 @@ function skipQuiet(){const c=S.pending,n=candidates().find(x=>!c||x.field!==c.fi
 
 // ── 고민 상담: 노트에 저장하지 않고, 가족에게도 보이지 않는 대화 (화면을 닫으면 사라짐) ──
 let W=[],wbusy=false,wtyping=false;
-const WOPEN=n=>`${n}, 무슨 일이든 편하게 말씀하세요. 여기서 나눈 이야기는 저장되지 않고, 가족에게도 보이지 않아요.`;
+const WOPEN=n=>`${n}, 무슨 일이든 편하게 말씀하세요.`;
 function helpCard(){return{role:'help'}}
 function wbubble(m,last){
   if(m.role==='help')return`<div class="helpc"><b>사람과도 이야기해 보세요</b><span>전문 상담 선생님이 24시간 들어 드려요. 전화비 외에 돈이 들지 않아요.</span><div class="row"><a class="btn pri" href="tel:15770199">1577-0199 정신건강 상담</a><a class="btn out" href="https://xn--910bqa26dz54h.com/network/?c=mental" target="_blank" rel="noopener">가까운 상담 센터</a></div></div>`;
@@ -434,7 +434,7 @@ function worry(){
   if(!W.length)W.push({role:'ai',text:WOPEN(S.profile.name)});
   const li=W.map(m=>m.role).lastIndexOf('ai');
   V.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><span class="lab">고민 상담</span><button class="btn ghost" id="wclr">대화 지우기</button></div>
-  ${sample?'':'<p class="wnote">미리보기라 정해진 말로만 답해요. 정식 오픈 때 AI가 들어 드려요.</p>'}
+  ${sample?'':'<p class="wnote">체험판이라 짧게 답해요</p>'}
   <div class="chat" id="wchat" aria-live="polite">${W.map((m,i)=>wbubble(m,i===li)).join('')}${wbusy?'<div class="think" aria-label="생각하는 중"><i></i><i></i><i></i></div>':''}</div>
   <div class="dock">
     ${dict&&!wtyping?`<button class="mic ${D.on?'on':''}" id="mic" aria-label="${D.on?'말하기 끝내기':'눌러서 말하기'}" ${wbusy?'disabled':''}>${ic(D.on?'i-stop':'i-mic',40)}</button><p class="miclab" id="miclab">${D.on?'다 말씀하시면 한 번 더 누르세요':'누르고 말씀하세요'}</p>`:''}
@@ -503,9 +503,9 @@ function settings(){
   <div class="card"><span class="lab">소리</span>${tts?`<label class="sw" style="color:var(--ink)">AI 말을 소리로 읽어 주기<input type="checkbox" id="sTts" ${S.tts?'checked':''}></label>
     <div class="seg" style="grid-template-columns:1fr 1fr"><button data-rate="slow" aria-pressed="${S.rate==='slow'}">천천히</button><button data-rate="normal" aria-pressed="${S.rate!=='slow'}">보통</button></div>
     <button class="btn ghost" id="sTest">${ic('i-speaker',20)}들어 보기</button>`:'<p class="muted">이 기기에서는 소리 읽기를 쓸 수 없어요.</p>'}
-    <p class="muted">${dict?'말로 대답하기를 쓸 수 있어요.':'이 기기에서는 말로 대답하기를 쓸 수 없어 글로 받아요.'}</p></div>
-  <div class="card"><label class="sw" style="color:var(--ink)">힘들거나 3일 동안 말이 없으면 가족에게 안부 연락 부탁하기<input type="checkbox" id="sCons" ${S.profile.alertConsent?'checked':''}></label><p class="muted">무슨 말을 했는지는 가족에게 가지 않아요.</p></div>
-  <div class="card"><span class="lab">내 노트 지키기</span><p class="muted">노트는 이 기기에만 저장돼요. 폰을 바꾸기 전에 파일로 저장해 두세요.</p>
+    ${dict?'':'<p class="muted">이 기기는 글로만 받아요.</p>'}</div>
+  <div class="card"><label class="sw" style="color:var(--ink)">3일 말이 없으면 가족에게 안부 부탁<input type="checkbox" id="sCons" ${S.profile.alertConsent?'checked':''}></label><p class="muted">대화 내용은 가지 않아요.</p></div>
+  <div class="card"><span class="lab">내 노트 지키기</span><p class="muted">폰 바꾸기 전에 저장해 두세요.</p>
     <button class="btn out" id="bk">${ic('i-share',20)}파일로 저장하기</button><label class="btn ghost" style="justify-content:center">파일에서 불러오기<input type="file" id="rs" accept="application/json,.json" class="hide"></label>
     <button class="btn ghost" id="pr">${ic('i-print',20)}종이로 뽑기</button></div>
   <div class="card"><button class="btn ghost" id="wipe" style="color:var(--red)">이 기기의 나날노트 모두 지우기</button></div>
@@ -530,13 +530,13 @@ function note(){
   V.innerHTML=`<div class="hello"><div class="ring">${ring()}<b>${total()}%</b><small>전체</small></div><div><h1>${esc(S.profile.name)}의<br>나날노트</h1></div></div>
   <div class="mods">${MODS.map(m=>{const p=progress(m),lk=!allowed(m);return`<a class="mod${lk?' locked':''}" href="#note-${m.k}"><div class="mini">${mini(lk?0:p)}<span>${ic(lk?'i-lock':m.ic,26)}</span></div><b>${esc(m.name)}</b><span class="pct">${lk?'원하실 때만':p+'%'}</span></a>`}).join('')}</div>
   <div class="row"><button class="btn out" id="nShare">${ic('i-share',20)}가족에게 보내기</button><button class="btn out" id="nPrint">${ic('i-print',20)}종이로 뽑기</button></div>
-  <p class="banner">나날노트는 유언장이 아닙니다. 법적 효력이 필요한 내용은 따로 안내해 드려요.</p>`;
+  <p class="banner">유언장은 아니에요</p>`;
   document.getElementById('nShare').onclick=shareFamily;document.getElementById('nPrint').onclick=printNote;
 }
 // 보험: 말씀하신 회사 이름을 알아보고 대표번호를 바로 보여 줌
 function insFor(v){const I=window.NANAL_INSURERS;return I&&v&&v!=='없음'?I.find(v):[]}
 function insHTML(v){const I=window.NANAL_INSURERS,h=insFor(v);if(!h.length)return'';
-  return`<div class="insc">${h.map(x=>`<div class="r"><b>${esc(x.n)}</b><div class="acts">${x.tel?`<a class="btn pri" href="${I.telHref(x.tel)}">📞 ${x.tel}</a>`:`<a class="btn out" href="${x.web}" target="_blank" rel="noopener">홈페이지에서 번호 보기</a>`}${x.s?`<a class="btn out" href="${I.telHref(x.s)}">65세 이상 전용 ${x.s}</a>`:''}</div></div>`).join('')}<small>회사 대표번호예요. 보험금 청구는 대표번호로 전화해 "보험금 청구"라고 말하면 돼요.</small></div>`}
+  return`<div class="insc">${h.map(x=>`<div class="r"><b>${esc(x.n)}</b><div class="acts">${x.tel?`<a class="btn pri" href="${I.telHref(x.tel)}">📞 ${x.tel}</a>`:`<a class="btn out" href="${x.web}" target="_blank" rel="noopener">홈페이지에서 번호 보기</a>`}${x.s?`<a class="btn out" href="${I.telHref(x.s)}">65세 이상 전용 ${x.s}</a>`:''}</div></div>`).join('')}<small>누르면 바로 전화돼요</small></div>`}
 // 노트 항목에서 바로 지도 연결
 const NEAR={care:['g=care','병원·요양병원·요양원·치매안심센터'],living:['c=clinic','동네 의원·약국'],funeral:['g=after','장례식장·추모공원·화장장'],assets:['c=ins','보험사 전화번호·세무사·법무사']};
 function noteDetail(k){
@@ -575,17 +575,18 @@ function check(){
   document.getElementById('dl').onclick=()=>{S.items=S.items.filter(x=>x!==i);save();render()};
   document.getElementById('ed').onclick=()=>{const v=document.getElementById('val');v.outerHTML=`<input id="edv" value="${esc(i.value)}" aria-label="고칠 내용">`;const e=document.getElementById('edv');e.focus();const b=document.getElementById('ed');b.innerHTML=ic('i-check',20)+'저장';b.onclick=()=>{const nv=mask(e.value.trim());if(nv){i.value=nv;i.status='확정';i.certainty='확실';save()}render()}};
 }
+let afterOpen=false;
 function family(){
   const vis=S.items.filter(i=>i.visible);
   V.innerHTML=`<a class="btn ghost" href="#home" style="align-self:flex-start">${ic('i-back',20)}돌아가기</a>
-  <p class="banner">가족이 보는 화면 미리보기예요. 실제로는 가족이 따로 들어와 봅니다.</p>
+  <p class="banner">가족이 보는 화면이에요</p>
   <h1>${esc(S.profile.name)}의 나날노트</h1>
   <div class="card stat"><div><b>${S.days.length}</b><span>대화한 날</span></div><div><b>${total()}%</b><span>노트</span></div><div><b>${esc(S.mood&&S.mood.date===today()?S.mood.val:'—')}</b><span>오늘 기분</span></div></div>
   <div class="card"><span class="lab">보여주신 내용</span>${vis.length?vis.map(i=>`<div class="item"><span class="f">${esc(modOf(i.module)?.name)} · ${esc(i.field)}</span><span class="v">${esc(i.value)}</span></div>`).join(''):'<p class="muted">아직 없어요. 노트에서 항목마다 켤 수 있어요.</p>'}</div>
-  <div class="card" style="flex-direction:row;align-items:center">${ic('i-lock',28)}<p class="muted">재산·의료·장례는 대리인 두 분이 확인한 뒤에 열려요.</p></div>
-  <a class="card" href="https://xn--910bqa26dz54h.com/network/" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><span class="lab">필요할 때</span><p class="big" style="margin:0">장례식장·세무사·법무사·보험사<br>가까운 곳 찾기 →</p></a>
+  <div class="card" style="flex-direction:row;align-items:center">${ic('i-lock',28)}<p class="muted">재산·의료·장례는 두 사람이 확인한 뒤 열려요.</p></div>
+  <a class="card" href="https://xn--910bqa26dz54h.com/network/" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><span class="lab">필요할 때</span><p class="big" style="margin:0">가까운 곳 찾기 →</p></a>
   <div class="card"><label for="fm">응원 한마디<textarea id="fm" rows="2" placeholder="오늘 이야기 너무 좋았어요"></textarea></label><button class="btn pri" id="fs">${ic('i-send',22)}보내기</button><p class="muted" id="fo" role="status"></p></div>`;
-  V.insertAdjacentHTML('beforeend',afterHTML());wireAfter();
+  V.insertAdjacentHTML('beforeend',`<details class="card afterBox" ${afterOpen||S.after?'open':''}><summary>돌아가신 뒤 절차 보기 (시연)</summary>${afterHTML()}</details>`);V.querySelector('.afterBox').ontoggle=e=>{afterOpen=e.target.open};wireAfter();
   document.getElementById('fs').onclick=()=>{const t=document.getElementById('fm').value.trim();if(!t)return;S.familyMsgs.push({text:mask(t).slice(0,300),date:today()});if(S.familyMsgs.length>20)S.familyMsgs.shift();save();document.getElementById('fm').value='';document.getElementById('fo').textContent='보냈어요. 첫 화면에 보여요.'};
 }
 const VENDORS=[{id:'v1',type:'hall',name:'○○ 장례식장',kind:'장례식장 · 빈소 4개',price:'1일장 650만 원 · 3일장 1,200만 원'},{id:'v2',type:'hall',name:'△△ 후불제 장례',kind:'후불제 장례',price:'무빈소 300만 원 · 1일장 580만 원'},{id:'v3',type:'rest',name:'□□ 추모공원',kind:'봉안당·수목장',price:'수목장 1위 350만 원'}];
