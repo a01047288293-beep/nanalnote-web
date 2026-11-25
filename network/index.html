@@ -112,7 +112,7 @@ function search(more){
   const cb=(data,status,pg)=>{
     if(status===kakao.maps.services.Status.ZERO_RESULT&&!more){$('list').innerHTML=`<p class="empty">${esc(center.label)} 주변 20km 안에 ${esc(cat.l)} 정보가 없어요.<br>다른 지역으로 찾아보세요.</p>`;clear();return}
     if(status!==kakao.maps.services.Status.OK){$('list').innerHTML='<p class="empty">잠시 후 다시 시도해 주세요.</p>';return}
-    page=pg;results=more?results.concat(data):data;render();
+    data=data.filter(p=>!/주차장|무인민원발급|ATM/.test(p.place_name+' '+p.category_name));page=pg;results=more?results.concat(data):data;render();
   };
   if(more&&page&&page.hasNextPage)page.nextPage();else ps.keywordSearch(cat.q,cb,opt);
 }
