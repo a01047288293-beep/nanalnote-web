@@ -1,0 +1,15 @@
+{
+  "name": "나날노트",
+  "short_name": "나날노트",
+  "description": "말하면, 정리됩니다 — 하루 10분 대화로 완성하는 나날노트",
+  "lang": "ko",
+  "start_url": "/app/",
+  "scope": "/app/",
+  "display": "standalone",
+  "background_color": "#F4F0E8",
+  "theme_color": "#1C3632",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
