@@ -138,6 +138,12 @@ html.fs1{zoom:1.12}html.fs2{zoom:1.25}
 h1,h2,h3,p,li,label,.q,.big{word-break:keep-all;overflow-wrap:anywhere}h1,h2,h3,.q{text-wrap:balance}
 .nlogo{width:auto;display:block;flex:none}
 .near{text-decoration:none;color:inherit;border-color:var(--gold)}
+.ist{display:grid;grid-template-columns:52px 1fr;gap:16px;align-items:center;padding:16px 0;border-top:1px solid var(--line)}.ist:first-of-type{border-top:0}
+.ist .n{width:52px;height:52px;border-radius:50%;background:var(--forest);color:#F4F0E8;display:grid;place-items:center;font:700 22px 'Noto Sans KR',sans-serif}
+.ist b{font-size:21px;font-weight:500;line-height:1.5}.ist .key{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);background:var(--paper);border-radius:8px;padding:0 8px;margin:0 2px;vertical-align:middle}
+.segOS{display:grid;grid-template-columns:1fr 1fr;gap:8px}.segOS button{min-height:48px;border-radius:10px;border:1px solid var(--line);background:var(--paper);font:500 17px 'Noto Sans KR',sans-serif;color:var(--ink);cursor:pointer}.segOS button[aria-pressed=true]{background:var(--forest);color:#F4F0E8;border-color:var(--forest)}
+.inapp{position:fixed;inset:0;z-index:70;background:var(--bg);display:flex;flex-direction:column;justify-content:center;gap:16px;padding:28px 22px calc(28px + env(safe-area-inset-bottom));font-family:'Noto Sans KR',sans-serif}
+.inapp h1{font-size:30px}.inapp p{font-size:19px;color:var(--soft);margin:0}
 .afterBox summary{cursor:pointer;font-size:17px;font-weight:500;list-style:none;display:flex;justify-content:space-between}.afterBox summary::after{content:'+';color:var(--gold);font-size:22px}.afterBox[open] summary::after{content:'–'}.afterBox #afterCard{border:0;padding:0;margin-top:10px;box-shadow:none;background:none}
 .insc{background:var(--mint);border-radius:12px;padding:12px 14px;display:grid;gap:10px;margin-top:6px}.insc .r{display:grid;gap:6px}.insc b{font-size:17px}.insc .acts{display:flex;gap:8px;flex-wrap:wrap}.insc .btn{min-height:48px;font-size:16px;padding:0 14px}.insc small{font-size:13.5px;color:var(--soft)}
 .worryCard{text-decoration:none;color:inherit;border-left:3px solid var(--gold)}
@@ -183,6 +189,7 @@ h1,h2,h3,p,li,label,.q,.big{word-break:keep-all;overflow-wrap:anywhere}h1,h2,h3,
   </nav>
 </div>
 <script src="/insurers.js"></script>
+<script src="/install.js"></script>
 <script>
 {
 const MODS=[
@@ -279,6 +286,7 @@ function render(){
   const n=pend().length,ct=document.getElementById('checkTab');ct.querySelector('.dot')?.remove();if(n)ct.insertAdjacentHTML('beforeend',`<span class="dot" aria-label="확인할 항목 ${n}개">${n}</span>`);
   document.querySelectorAll('#tabs a').forEach(a=>a.setAttribute('aria-current',(r.startsWith(a.hash.slice(1)))?'page':'false'));
   const shell=!!S.profile.name;document.getElementById('tabs').classList.toggle('hide',!shell);document.getElementById('famBtn').classList.toggle('hide',!shell);document.getElementById('setBtn').classList.toggle('hide',!shell);
+  if(r==='install')return installView();
   if(!shell)return onboard();
   if(r.startsWith('note-'))return noteDetail(r.slice(5));
   ({home,talk,note,check,family,settings,worry}[r]||home)();
@@ -299,6 +307,7 @@ function home(){
   ${S.after&&S.after.reported&&!S.after.opened?`<div class="card" style="border-color:var(--red)"><span class="lab" style="color:var(--red)">확인해 주세요</span><p style="font-size:19px">가족이 나날노트 공개 절차를 시작했어요. 괜찮으시면 아래를 눌러 주세요. 바로 취소됩니다.</p><button class="btn pri" id="alive">저 괜찮아요 — 취소하기</button></div>`:''}
   <div class="card forest"><span class="lab">오늘의 이야기${nf?' · '+esc(modOf(nf.module).name):''}</span><p class="q">${esc(q)}</p><a class="btn pri" href="#talk">${ic('i-mic',26)}말로 대답하기</a></div>
   <div class="card"><span class="lab">오늘 기분</span><div class="mood">${[['좋음','i-sun'],['보통','i-cloud'],['힘듦','i-heart']].map(([v,i])=>`<button data-m="${v}" aria-pressed="${md===v}">${ic(i,26)}${v==='좋음'?'좋아요':v==='보통'?'그저 그래요':'힘들어요'}</button>`).join('')}</div></div>
+  ${showInstallCard()?`<a class="card near" href="#install" style="flex-direction:row;align-items:center;gap:14px">${ic('i-home',28)}<p class="big" style="margin:0;flex:1">휴대폰에 설치하기</p><span aria-hidden="true">→</span></a>`:''}
   ${msg?`<div class="card"><span class="lab">가족의 응원</span><p style="font-size:19px">${esc(msg.text)}</p></div>`:''}
 `;
   const al=document.getElementById('alive');if(al)al.onclick=()=>{S.after=null;save();home()};
@@ -508,6 +517,7 @@ function settings(){
   <div class="card"><span class="lab">내 노트 지키기</span><p class="muted">폰 바꾸기 전에 저장해 두세요.</p>
     <button class="btn out" id="bk">${ic('i-share',20)}파일로 저장하기</button><label class="btn ghost" style="justify-content:center">파일에서 불러오기<input type="file" id="rs" accept="application/json,.json" class="hide"></label>
     <button class="btn ghost" id="pr">${ic('i-print',20)}종이로 뽑기</button></div>
+  ${window.NANAL_INSTALL&&!NANAL_INSTALL.standalone&&!window.claude?`<a class="btn out" href="#install">${ic('i-home',20)}휴대폰에 설치하기</a>`:''}
   <div class="card"><button class="btn ghost" id="wipe" style="color:var(--red)">이 기기의 나날노트 모두 지우기</button></div>
   <p class="muted" style="text-align:center"><a href="https://xn--910bqa26dz54h.com/privacy/" style="color:inherit">개인정보 처리방침</a> · 운영 주식회사 아투아</p>`;
   const $=id=>document.getElementById(id);
@@ -537,6 +547,36 @@ function note(){
 function insFor(v){const I=window.NANAL_INSURERS;return I&&v&&v!=='없음'?I.find(v):[]}
 function insHTML(v){const I=window.NANAL_INSURERS,h=insFor(v);if(!h.length)return'';
   return`<div class="insc">${h.map(x=>`<div class="r"><b>${esc(x.n)}</b><div class="acts">${x.tel?`<a class="btn pri" href="${I.telHref(x.tel)}">📞 ${x.tel}</a>`:`<a class="btn out" href="${x.web}" target="_blank" rel="noopener">홈페이지에서 번호 보기</a>`}${x.s?`<a class="btn out" href="${I.telHref(x.s)}">65세 이상 전용 ${x.s}</a>`:''}</div></div>`).join('')}<small>누르면 바로 전화돼요</small></div>`}
+// ── 휴대폰에 설치하기 ──
+let iosTab=null;
+const SHARE=`<span class="key">${'<svg width="20" height="20" aria-hidden="true"><use href="#i-share"/></svg>'}공유</span>`;
+function installView(){const I=window.NANAL_INSTALL;if(!I){location.hash='#home';return}
+  const os=iosTab||(I.os==='pc'?'ios':I.os),back=S.profile.name?'#home':'#';
+  const steps=os==='ios'?[`아래쪽 ${SHARE} 누르기`,`<span class="key">홈 화면에 추가</span> 누르기<br><small class="muted">안 보이면 목록을 위로 밀어 주세요</small>`,`오른쪽 위 <span class="key">추가</span>`]
+    :[`크롬 오른쪽 위 <span class="key">⋮</span>`,`<span class="key">앱 설치</span> 또는 <span class="key">홈 화면에 추가</span>`,`<span class="key">설치</span> 누르기`];
+  V.innerHTML=`<a class="btn ghost" href="${back}" style="align-self:flex-start">${ic('i-back',20)}돌아가기</a><h1>휴대폰에 설치하기</h1>
+  ${I.standalone?`<div class="card"><p class="big">${ic('i-check',28)} 이미 설치되어 있어요</p><a class="btn pri" href="#home">나날노트 열기</a></div>`:
+  I.inApp?`<div class="card"><p class="big">지금은 ${esc(I.inApp)} 안이에요</p><p class="muted">여기서는 설치가 안 돼요. 브라우저로 열어 주세요.</p><button class="btn pri" id="iOut">브라우저로 열기</button><button class="btn out" id="iCopy">주소 복사</button></div>`:
+  `${I.os==='android'?`<button class="btn pri" id="iPrompt" ${I.canPrompt()?'':'hidden'}>${ic('i-home',22)}앱 설치</button>`:''}
+  ${I.os==='pc'?`<div class="card"><p class="big">휴대폰으로 이 주소를 열어 주세요</p><p style="font-size:26px;font-weight:700;margin:0">나날노트.com/install</p><div id="qr" style="align-self:center"></div></div>`:''}
+  <div class="segOS" role="group" aria-label="휴대폰 종류"><button data-os="ios" aria-pressed="${os==='ios'}">아이폰</button><button data-os="android" aria-pressed="${os==='android'}">안드로이드</button></div>
+  <div class="card">${steps.map((t,i)=>`<div class="ist"><span class="n">${i+1}</span><b>${t}</b></div>`).join('')}</div>
+  <p class="muted" style="text-align:center">설치하면 홈 화면에 나날노트 아이콘이 생겨요</p>`}`;
+  const $=id=>document.getElementById(id);
+  V.querySelectorAll('[data-os]').forEach(b=>b.onclick=()=>{iosTab=b.dataset.os;installView()});
+  if($('iOut'))$('iOut').onclick=()=>{if(!I.openOutside(location.href))toast(I.ios?'오른쪽 아래 ⋯ → Safari로 열기':'오른쪽 위 메뉴 → 다른 브라우저로 열기')};
+  if($('iCopy'))$('iCopy').onclick=async()=>toast(await I.copy(location.href)?'주소를 복사했어요':'복사하지 못했어요');
+  const pb=$('iPrompt');if(pb){I.onReady(()=>{pb.hidden=false});pb.onclick=async()=>{const r=await I.prompt();if(r==='ok')toast('설치했어요. 홈 화면을 확인해 주세요');else if(r==='none')toast('크롬 메뉴 ⋮에서 설치해 주세요')}}
+  if($('qr')){const draw=()=>{try{const q=qrcode(0,'M');q.addData('https://xn--910bqa26dz54h.com/install/');q.make();$('qr').innerHTML=q.createSvgTag({cellSize:6,margin:2})}catch(_){}};if(window.qrcode)draw();else{const sc=document.createElement('script');sc.src='https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js';sc.onload=draw;document.head.appendChild(sc)}}
+}
+// 카카오톡 같은 앱 안에서 열면: 노트가 그 안에 갇히지 않게 브라우저로 안내
+function inAppGate(){const I=window.NANAL_INSTALL;if(!I||!I.inApp||DEMO||window.claude)return;try{if(sessionStorage.getItem('inappOk'))return}catch(_){}
+  document.body.insertAdjacentHTML('beforeend',`<div class="inapp" id="inapp" role="dialog" aria-modal="true" aria-labelledby="inappT"><h1 id="inappT">브라우저로 열어 주세요</h1><p>${esc(I.inApp)} 안에서는 설치가 안 되고, 적은 노트가 사라질 수 있어요.</p><button class="btn pri" id="inOut">브라우저로 열기</button><button class="btn out" id="inCopy">주소 복사</button><p style="font-size:16px">${I.ios?'안 되면: 오른쪽 아래 ⋯ → Safari로 열기':'안 되면: 오른쪽 위 ⋮ → 다른 브라우저로 열기'}</p><button class="btn ghost" id="inStay">그냥 여기서 볼게요</button></div>`);
+  const $=id=>document.getElementById(id);
+  $('inOut').onclick=()=>{if(!I.openOutside(location.href))toast(I.ios?'오른쪽 아래 ⋯ → Safari로 열기':'오른쪽 위 메뉴를 눌러 주세요')};
+  $('inCopy').onclick=async()=>toast(await I.copy(location.href)?'주소를 복사했어요':'복사하지 못했어요');
+  $('inStay').onclick=()=>{try{sessionStorage.setItem('inappOk','1')}catch(_){}$('inapp').remove()}}
+const showInstallCard=()=>{const I=window.NANAL_INSTALL;if(!I||I.standalone||DEMO||window.claude||I.os==='pc')return false;try{return !localStorage.getItem('nanal-installed')&&!localStorage.getItem('nanal-install-hide')}catch(_){return true}};
 // 노트 항목에서 바로 지도 연결
 const NEAR={care:['g=care','병원·요양병원·요양원·치매안심센터'],living:['c=clinic','동네 의원·약국'],funeral:['g=after','장례식장·추모공원·화장장'],assets:['c=ins','보험사 전화번호·세무사·법무사']};
 function noteDetail(k){
@@ -630,6 +670,7 @@ window.addEventListener('hashchange',()=>{if(location.hash==='#check')ci=0;rende
     }else local();
   }catch(e){}
   if(DEMO)demoBar();
+  inAppGate();
   if(!dict)dict=webDict();if(!tts)tts=webTts();wireDict();
   {const n=(S.items||[]).length;S.items=(S.items||[]).filter(i=>modOf(i.module));if(S.pending&&!modOf(S.pending.module))S.pending=null;if(n!==S.items.length)setTimeout(save,0)}
   if(!S.profile.since)S.profile.since=S.days[0]||today();if(!S.asked)S.asked=[];S.v=3;applyFs();
