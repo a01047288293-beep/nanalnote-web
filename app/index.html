@@ -414,7 +414,10 @@ function settings(){
   V.querySelectorAll('[data-rate]').forEach(b=>b.onclick=()=>{S.rate=b.dataset.rate;save();settings()});
   if($('sTest'))$('sTest').onclick=()=>tts.speak(`${S.profile.name}, 안녕하세요. 이렇게 읽어 드릴게요.`).catch(()=>{});
   $('sCons').onchange=e=>{S.profile.alertConsent=e.target.checked;save()};
-  $('bk').onclick=()=>{const b=new Blob([JSON.stringify({app:'nanalnote',v:3,at:new Date().toISOString(),data:S},null,1)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`nanalnote-backup-${today()}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000);toast('파일로 저장했어요')};
+  $('bk').onclick=async()=>{const json=JSON.stringify({app:'nanalnote',v:3,at:new Date().toISOString(),data:S},null,1),fn=`nanalnote-backup-${today()}.json`;
+    let dl=null;try{dl=window.claude&&claude.use?await claude.use('downloads'):null}catch(_){}
+    if(dl){try{await dl.save({filename:fn,data:json});toast('파일로 저장했어요')}catch(_){toast('저장을 취소했어요')}return}
+    const b=new Blob([json],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`nanalnote-backup-${today()}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000);toast('파일로 저장했어요')};
   $('rs').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const j=JSON.parse(await f.text());const d=j&&j.app==='nanalnote'?j.data:null;if(!d||!d.profile||!Array.isArray(d.items))throw 0;
     if(!confirm('지금 노트를 이 파일 내용으로 바꿀까요?'))return;S=Object.assign(blank(),d);save();applyFs();toast('불러왔어요');location.hash='#home'}catch(_){toast('나날노트 파일이 아니에요')}};
   $('pr').onclick=printNote;
