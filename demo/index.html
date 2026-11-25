@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>폰 화면으로 체험하기 — 나날노트</title>
+<meta name="description" content="예시 어르신 노트로 나날노트 앱을 휴대폰 화면 그대로 눌러 보세요.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#1C3632">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@800&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4F0E8;--paper:#FBF9F4;--ink:#1A1F1E;--soft:#575D5B;--line:#DDD4C4;--forest:#1C3632;--gold:#C9A96E;--goldd:#9A7A42}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 'Noto Sans KR',system-ui,sans-serif;word-break:keep-all}
+header{background:var(--forest);color:#F4F0E8;padding:12px 20px;display:flex;align-items:center;gap:12px}
+header a{color:inherit;text-decoration:none;font:800 20px 'Nanum Myeongjo',serif}
+header span{margin-left:auto;font-size:14px;opacity:.85}
+main{max-width:1100px;margin:0 auto;padding:28px 20px 40px;display:grid;grid-template-columns:auto 1fr;gap:40px;align-items:start}
+.phone{width:390px;height:812px;border-radius:52px;background:#111;padding:14px;box-shadow:0 30px 60px rgba(28,54,50,.25),inset 0 0 0 2px #333;position:relative}
+.phone:before{content:"";position:absolute;top:22px;left:50%;transform:translateX(-50%);width:110px;height:30px;border-radius:20px;background:#111;z-index:2}
+.screen{width:100%;height:100%;border-radius:40px;overflow:hidden;background:#fff}
+iframe{width:100%;height:100%;border:0;display:block;padding-top:34px;background:#FBF9F4}
+.side h1{font:800 30px/1.3 'Nanum Myeongjo',serif;margin:0 0 8px}
+.side .lead{color:var(--soft);margin:0 0 22px}
+.who{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:22px;font-size:15px}
+.who b{font-size:16px}
+.steps{display:grid;gap:10px}
+.step{display:grid;grid-template-columns:36px 1fr;gap:12px;align-items:start;text-align:left;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;cursor:pointer;font:inherit;color:inherit;width:100%}
+.step:hover,.step[aria-current=true]{border-color:var(--gold);box-shadow:0 0 0 2px rgba(201,169,110,.3)}
+.step i{font-style:normal;width:36px;height:36px;border-radius:50%;background:var(--forest);color:#F4F0E8;display:grid;place-items:center;font-weight:700}
+.step b{display:block;font-size:17px}
+.step small{color:var(--soft);font-size:14.5px}
+.tools{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.btn{min-height:48px;border-radius:10px;border:1px solid var(--forest);background:var(--forest);color:#F4F0E8;font:500 15.5px 'Noto Sans KR',sans-serif;padding:0 16px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+.btn.out{background:transparent;color:var(--forest)}
+.note{font-size:13.5px;color:var(--soft);margin-top:16px}
+.mobile{display:none}
+@media (max-width:900px){main{grid-template-columns:1fr;justify-items:center;gap:24px}.side{max-width:560px}}
+@media (max-width:520px){.phone{display:none}.mobile{display:block;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:18px}main{padding-top:20px}}
+</style>
+</head>
+<body>
+<header><a href="/">나날노트</a><span>폰 화면으로 체험하기</span></header>
+<main>
+  <div class="phone" aria-label="휴대폰 화면 미리보기"><div class="screen"><iframe id="app" title="나날노트 앱 체험" src="/app/?demo=1#home"></iframe></div></div>
+  <section class="side">
+    <div class="mobile"><b>지금 휴대폰으로 보고 계시네요.</b><br>아래 버튼을 누르면 체험 화면이 전체 화면으로 열려요.<div class="tools"><a class="btn" href="/app/?demo=1#home">체험 화면 열기</a></div></div>
+    <h1>예시 노트로 눌러 보세요</h1>
+    <p class="lead">왼쪽 화면은 실제 앱과 똑같이 움직여요. 순서대로 눌러 보시거나, 화면을 직접 눌러 보셔도 돼요.</p>
+    <div class="who"><b>예시 어르신: 순자 어머님</b><br>시작한 지 24일째 · 가족: 큰아들 민수, 딸 지영 · 노트 10칸 작성</div>
+    <div class="steps" id="steps">
+      <button class="step" data-go="/app/?demo=1#home"><i>1</i><span><b>오늘</b><small>오늘 기분을 고르고, 가족이 보낸 응원 글을 봐요.</small></span></button>
+      <button class="step" data-go="/app/?demo=1#talk"><i>2</i><span><b>대화</b><small>마이크를 누르고 말하면 노트에 적혀요. 어제 보험 이야기가 남아 있어요.</small></span></button>
+      <button class="step" data-go="/app/?demo=1#note-assets"><i>3</i><span><b>노트 · 보험 전화번호</b><small>"삼성생명, 우체국 보험"이라고 말한 칸에 대표번호 버튼이 붙어 있어요.</small></span></button>
+      <button class="step" data-go="/app/?demo=1#check"><i>4</i><span><b>주간 확인</b><small>AI가 적은 내용이 맞는지 "맞아요 / 고칠게요"로 확인해요.</small></span></button>
+      <button class="step" data-go="/app/?demo=1#worry"><i>5</i><span><b>마음 · 고민 상담</b><small>저장되지 않는 대화예요. "요즘 외로워"라고 적어 보세요.</small></span></button>
+      <button class="step" data-go="/app/?demo=1#family"><i>6</i><span><b>가족 화면</b><small>어머님이 켜 둔 칸만 가족에게 보여요.</small></span></button>
+      <button class="step" data-go="/network/?c=ins"><i>7</i><span><b>보험사 전화번호 찾기</b><small>회사 이름으로 대표번호를 찾아 바로 전화해요.</small></span></button>
+      <button class="step" data-go="/network/?c=hospital"><i>8</i><span><b>가까운 병원·장례식장</b><small>지도에서 가까운 순으로 찾아요 (광주 남구 기준).</small></span></button>
+    </div>
+    <div class="tools">
+      <button class="btn out" id="reset">예시 노트 처음 상태로</button>
+      <a class="btn out" href="/app/?demo=1#home" target="_blank" rel="noopener">새 창으로 크게 보기</a>
+      <a class="btn" href="/app/">진짜로 시작하기</a>
+    </div>
+    <p class="note">체험 화면에서 적은 내용은 이 기기에만, 실제 노트와 따로 저장돼요. 지금은 AI 없이 기본 대답으로 움직이는 체험판이라 대답이 단순해요. 보험사 번호는 각 회사 대표번호(2026.11.25 확인)예요.</p>
+  </section>
+</main>
+<script>
+const f=document.getElementById('app'),steps=document.getElementById('steps');
+function go(u){const cur=f.contentWindow&&f.contentWindow.location;
+  try{const nu=new URL(u,location.href);if(cur&&cur.pathname===nu.pathname&&cur.search===nu.search){cur.hash=nu.hash;return}}catch(_){}
+  f.src=u}
+steps.onclick=e=>{const b=e.target.closest('.step');if(!b)return;steps.querySelectorAll('.step').forEach(x=>x.removeAttribute('aria-current'));b.setAttribute('aria-current','true');
+  if(innerWidth<=520){location.href=b.dataset.go;return}go(b.dataset.go)};
+document.getElementById('reset').onclick=()=>{try{localStorage.removeItem('nanal-demo')}catch(_){}f.src='/app/?demo=1&r='+Date.now()+'#home'};
+</script>
+</body>
+</html>

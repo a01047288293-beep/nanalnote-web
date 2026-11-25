@@ -201,6 +201,19 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const today=()=>new Date().toISOString().slice(0,10);
 const ic=(id,s=24)=>`<svg width="${s}" height="${s}" aria-hidden="true"><use href="#${id}"/></svg>`;
 const blank=()=>({v:3,asked:[],profile:{name:'',family:'',consent:{care:false,funeral:false}},items:[],chat:[],days:[],familyMsgs:[],pending:null,mood:null,tts:false,proxies:['',''],after:null});
+// 체험 모드(?demo): 예시 어르신 노트로 시작하고, 실제 노트와 따로 저장
+const DEMO=new URLSearchParams(location.search).has('demo'),KEY=DEMO?'nanal-demo':'nanal';
+function demoData(){const ago=n=>new Date(Date.now()-n*864e5).toISOString().slice(0,10);
+  const it=(module,field,value,status,visible,n)=>({id:'d'+module+field.length+n,module,field,value,quote:value,certainty:'확실',status,visible,at:ago(n)});
+  const d=blank();d.profile={name:'순자 어머님',family:'큰아들 민수, 딸 지영',since:ago(24),consent:{care:true,funeral:true}};
+  d.days=[24,22,20,17,15,13,10,8,6,3,1].map(ago);
+  d.items=[it('living','비상 연락처','큰아들 민수, 옆집 박 씨 아주머니','확정',true,22),it('living','단골 병원·약국','봉선동 내과, 시장 앞 약국','확정',true,20),it('living','복용 약','혈압약 아침에 한 알','미확인',true,3),
+   it('assets','금융','농협이랑 우체국 통장','확정',false,15),it('assets','보험','삼성생명 종신보험 하나랑 우체국 보험','미확인',true,1),it('assets','중요 서류 위치','안방 장롱 위 서랍, 도장도 같이','확정',false,13),
+   it('care','지내고 싶은 곳','되도록 집에서, 힘들면 가까운 요양병원','확정',true,10),it('funeral','종교·장례 형식','천주교, 성당에서 조용히','미확인',false,6),it('digital','사진','휴대폰 사진은 지영이한테','확정',true,8),
+   it('family','가족에게 남기는 말','너희 덕분에 행복했다. 서로 아끼며 살아라','미확인',false,1)];
+  d.chat=[{role:'ai',text:'어머님, 들어 두신 보험이 있으세요? 어느 회사인지 기억나세요?',date:ago(1)},{role:'me',text:'삼성생명 종신보험 하나랑 우체국 보험 있어',date:ago(1)},{role:'chip',text:'재산 지도 · 보험에 적었어요',date:ago(1)},{role:'chip',text:'삼성생명·우체국보험 대표번호를 노트에 붙여 두었어요',date:ago(1)},{role:'ai',text:'잘 적어 두었어요. 가족분들이 나중에 헤매지 않으실 거예요.',date:ago(1)}];
+  d.familyMsgs=[{text:'엄마, 이번 주말에 지영이랑 갈게요. 맛있는 거 사 갈게요!',date:ago(1)}];
+  d.proxies=['큰아들 민수','딸 지영'];return d}
 let S=blank(),ref=null,sample=null,dict=null,tts=null,loaded=false,saving=false,again=false,busy=false,typing=false,ci=0,ob={step:0,name:'',family:''};
 const V=document.getElementById('view');
 
@@ -223,7 +236,7 @@ const okReply=r=>r&&r.length<=260&&!BAD_REPLY.some(x=>x.test(r));
 const norm=v=>String(v).replace(/[\s.,!?~"'·]/g,'').toLowerCase();
 const similar=(a,b)=>{const x=norm(a),y=norm(b);return x===y||(x.length>3&&y.includes(x))||(y.length>3&&x.includes(y))};
 async function save(){if(!loaded)return;if(saving){again=true;return}saving=true;
-  do{again=false;const body=JSON.parse(JSON.stringify(S));try{if(ref)await ref.set(body);else localStorage.setItem('nanal',JSON.stringify(body))}catch(e){try{localStorage.setItem('nanal',JSON.stringify(body))}catch(_){}}}while(again);saving=false}
+  do{again=false;const body=JSON.parse(JSON.stringify(S));try{if(ref)await ref.set(body);else localStorage.setItem(KEY,JSON.stringify(body))}catch(e){try{localStorage.setItem(KEY,JSON.stringify(body))}catch(_){}}}while(again);saving=false}
 const allowed=m=>!m.lock||S.profile.consent[m.k];
 const has=(mk,f)=>S.items.some(i=>i.module===mk&&i.field===f);
 const dayN=()=>Math.floor((Date.parse(today())-Date.parse(S.profile.since||S.days[0]||today()))/864e5);
@@ -492,7 +505,7 @@ function settings(){
   $('rs').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const j=JSON.parse(await f.text());const d=j&&j.app==='nanalnote'?j.data:null;if(!d||!d.profile||!Array.isArray(d.items))throw 0;
     if(!confirm('지금 노트를 이 파일 내용으로 바꿀까요?'))return;S=Object.assign(blank(),d);save();applyFs();toast('불러왔어요');location.hash='#home'}catch(_){toast('나날노트 파일이 아니에요')}};
   $('pr').onclick=printNote;
-  $('wipe').onclick=()=>{if(!confirm('이 기기에 저장된 나날노트를 모두 지울까요? 되돌릴 수 없어요.'))return;S=blank();ob={step:0,name:'',family:''};try{localStorage.removeItem('nanal')}catch(_){}save();applyFs();history.replaceState(null,'',location.pathname);render()};
+  $('wipe').onclick=()=>{if(!confirm('이 기기에 저장된 나날노트를 모두 지울까요? 되돌릴 수 없어요.'))return;S=blank();ob={step:0,name:'',family:''};try{localStorage.removeItem(KEY)}catch(_){}save();applyFs();history.replaceState(null,'',location.pathname);render()};
 }
 function note(){
   V.innerHTML=`<div class="hello"><div class="ring">${ring()}<b>${total()}%</b><small>전체</small></div><div><h1>${esc(S.profile.name)}의<br>나날노트</h1></div></div>
@@ -587,15 +600,16 @@ function wireAfter(){
 window.addEventListener('hashchange',()=>{if(location.hash==='#check')ci=0;render();window.scrollTo(0,0)});
 (async()=>{
   const timer=setTimeout(()=>{if(!loaded){loaded=true;render()}},10000);
-  const local=()=>{try{const l=localStorage.getItem('nanal');if(l)S=Object.assign(blank(),JSON.parse(l))}catch(_){}};
+  const local=()=>{try{const l=localStorage.getItem(KEY);if(l)S=Object.assign(blank(),JSON.parse(l));else if(DEMO)S=demoData()}catch(_){if(DEMO)S=demoData()}};
   try{
-    if(window.claude&&claude.use){
+    if(window.claude&&claude.use&&!DEMO){
       const [db,u,s,di,t]=await Promise.all(['db','user','sample','dictation','tts'].map(n=>claude.use(n).catch(()=>null)));
       sample=s;dict=di;tts=t;wireDict();
       const uid=u?await u.id():null;
       if(db&&uid){ref=db.doc('data/users/'+uid+'/nanal');const snap=await ref.get();if(snap.exists)S=Object.assign(blank(),snap.data())}else local();
     }else local();
   }catch(e){}
+  if(DEMO){document.body.insertAdjacentHTML('afterbegin','<div style="background:#C9A96E;color:#1A1F1E;font:500 13.5px Noto Sans KR,sans-serif;text-align:center;padding:6px 10px">체험용 예시 노트예요 · 실제 노트와 따로 저장돼요</div>');document.title='나날노트 체험'}
   if(!dict)dict=webDict();if(!tts)tts=webTts();wireDict();
   {const n=(S.items||[]).length;S.items=(S.items||[]).filter(i=>modOf(i.module));if(S.pending&&!modOf(S.pending.module))S.pending=null;if(n!==S.items.length)setTimeout(save,0)}
   if(!S.profile.since)S.profile.since=S.days[0]||today();if(!S.asked)S.asked=[];S.v=3;applyFs();
