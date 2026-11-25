@@ -133,6 +133,7 @@ html.fs1{zoom:1.12}html.fs2{zoom:1.25}
 h1,h2,h3,p,li,label,.q,.big{word-break:keep-all;overflow-wrap:anywhere}h1,h2,h3,.q{text-wrap:balance}
 .nlogo{width:auto;display:block;flex:none}
 .near{text-decoration:none;color:inherit;border-color:var(--gold)}
+.insc{background:var(--mint);border-radius:12px;padding:12px 14px;display:grid;gap:10px;margin-top:6px}.insc .r{display:grid;gap:6px}.insc b{font-size:17px}.insc .acts{display:flex;gap:8px;flex-wrap:wrap}.insc .btn{min-height:48px;font-size:16px;padding:0 14px}.insc small{font-size:13.5px;color:var(--soft)}
 .worryCard{text-decoration:none;color:inherit;border-left:3px solid var(--gold)}
 .helpc{background:var(--mint);border-radius:12px;padding:14px 16px;display:grid;gap:10px;font-size:16px}.helpc .row{gap:8px;display:grid;grid-template-columns:1fr}.helpc .btn{min-height:50px;font-size:16px}
 .wnote{font-size:14px;color:var(--soft);text-align:center;margin:0}
@@ -175,6 +176,7 @@ h1,h2,h3,p,li,label,.q,.big{word-break:keep-all;overflow-wrap:anywhere}h1,h2,h3,
     <a href="#check" id="checkTab"><svg width="26" height="26" aria-hidden="true"><use href="#i-check"/></svg>확인</a>
   </nav>
 </div>
+<script src="/insurers.js"></script>
 <script>
 {
 const MODS=[
@@ -383,6 +385,7 @@ function basicReply(text){const n=S.profile.name,pf=S.pending,t=text.trim(),m=pf
   else if(ex){ex.value=value;ex.quote=t.slice(0,200);ex.at=today()}
   else S.items.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),module:pf.module,field:pf.field,value,quote:t.slice(0,200),certainty:'확실',status:'미확인',visible:false,at:today()});
   push('chip',`${m.name} · ${pf.field}에 적었어요`);
+  if(pf.field==='보험'){const h=insFor(value);if(h.length)push('chip',`${h.map(x=>x.n).join('·')} 대표번호를 노트에 붙여 두었어요`)}
   const nx=candidates().find(c=>c.field!==pf.field)||null;setPending(nx);
   say(`${THANKS[(S.items.length+S.days.length)%THANKS.length]} ${nx?QB[nx.field]:'오늘 준비한 질문은 다 했어요. 일요일에 확인 탭에서 한 번만 봐 주세요.'}`)}
 function skipQuiet(){const c=S.pending,n=candidates().find(x=>!c||x.field!==c.field)||null;setPending(n);push('ai',n?`괜찮아요, 나중에 여쭐게요. 그럼 이건 어떠세요? ${QB[n.field]}`:'괜찮아요. 오늘은 여기까지 해요.')}
@@ -452,10 +455,10 @@ function speakW(){if(!tts||!S.tts)return;const m=[...W].reverse().find(x=>x.role
 // ── 인쇄 · 가족에게 보내기 ──
 function printNote(){const pa=document.getElementById('printArea');const d=new Date().toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric'});
   pa.innerHTML=`<h1>${esc(S.profile.name)}의 나날노트</h1><p class="pn">${esc(d)} 기준 · 나날노트.com · 이 노트는 유언장이 아니며 법적 효력이 없습니다.</p>`+
-   MODS.map(m=>{const its=S.items.filter(i=>i.module===m.k);if(!its.length)return'';return`<section><h2>${esc(m.name)}</h2><table>${its.map(i=>`<tr><td>${esc(i.field)}</td><td>${esc(i.value)}${i.status!=='확정'?' <span class="pn">(확인 전)</span>':''}</td></tr>`).join('')}</table></section>`}).join('')||'<p>아직 적힌 내용이 없어요.</p>';
+   MODS.map(m=>{const its=S.items.filter(i=>i.module===m.k);if(!its.length)return'';return`<section><h2>${esc(m.name)}</h2><table>${its.map(i=>`<tr><td>${esc(i.field)}</td><td>${esc(i.value)}${i.status!=='확정'?' <span class="pn">(확인 전)</span>':''}${i.field==='보험'?insFor(i.value).filter(x=>x.tel).map(x=>`<br><span class="pn">${esc(x.n)} ${x.tel}</span>`).join(''):''}</td></tr>`).join('')}</table></section>`}).join('')||'<p>아직 적힌 내용이 없어요.</p>';
   window.print()}
 async function shareFamily(){const vis=S.items.filter(i=>i.visible);if(!vis.length){toast('먼저 노트에서 보여줄 항목을 켜 주세요');return}
-  const text=`[${S.profile.name}의 나날노트]\n`+vis.map(i=>`· ${modOf(i.module)?.name} - ${i.field}: ${i.value}`).join('\n')+`\n\n나날노트.com`;
+  const text=`[${S.profile.name}의 나날노트]\n`+vis.map(i=>`· ${modOf(i.module)?.name} - ${i.field}: ${i.value}`+(i.field==='보험'?insFor(i.value).filter(x=>x.tel).map(x=>` (${x.n} ${x.tel})`).join(''):'')).join('\n')+`\n\n나날노트.com`;
   try{if(navigator.share){await navigator.share({title:'나날노트',text});return}}catch(e){if(e&&e.name==='AbortError')return}
   try{await navigator.clipboard.writeText(text);toast('복사했어요. 카톡에 붙여 넣으세요')}catch(_){toast('이 기기에서는 보내기를 쓸 수 없어요')}}
 
@@ -498,15 +501,19 @@ function note(){
   <p class="banner">나날노트는 유언장이 아닙니다. 법적 효력이 필요한 내용은 따로 안내해 드려요.</p>`;
   document.getElementById('nShare').onclick=shareFamily;document.getElementById('nPrint').onclick=printNote;
 }
+// 보험: 말씀하신 회사 이름을 알아보고 대표번호를 바로 보여 줌
+function insFor(v){const I=window.NANAL_INSURERS;return I&&v&&v!=='없음'?I.find(v):[]}
+function insHTML(v){const I=window.NANAL_INSURERS,h=insFor(v);if(!h.length)return'';
+  return`<div class="insc">${h.map(x=>`<div class="r"><b>${esc(x.n)}</b><div class="acts">${x.tel?`<a class="btn pri" href="${I.telHref(x.tel)}">📞 ${x.tel}</a>`:`<a class="btn out" href="${x.web}" target="_blank" rel="noopener">홈페이지에서 번호 보기</a>`}${x.s?`<a class="btn out" href="${I.telHref(x.s)}">65세 이상 전용 ${x.s}</a>`:''}</div></div>`).join('')}<small>회사 대표번호예요. 보험금 청구는 대표번호로 전화해 "보험금 청구"라고 말하면 돼요.</small></div>`}
 // 노트 항목에서 바로 지도 연결
-const NEAR={care:['g=care','병원·요양병원·요양원·치매안심센터'],living:['c=clinic','동네 의원·약국'],funeral:['g=after','장례식장·추모공원·화장장'],assets:['g=legal','세무사·법무사·보험사']};
+const NEAR={care:['g=care','병원·요양병원·요양원·치매안심센터'],living:['c=clinic','동네 의원·약국'],funeral:['g=after','장례식장·추모공원·화장장'],assets:['c=ins','보험사 전화번호·세무사·법무사']};
 function noteDetail(k){
   const m=modOf(k);if(!m){location.hash='#note';return}
   const its=S.items.filter(i=>i.module===k);
   V.innerHTML=`<a class="btn ghost" href="#note" style="align-self:flex-start">${ic('i-back',20)}노트</a>
   <div class="hello"><div class="mod" style="border:0;background:none;padding:0"><div class="mini">${mini(allowed(m)?progress(m):0)}<span>${ic(allowed(m)?m.ic:'i-lock',26)}</span></div></div><h1>${esc(m.name)}</h1></div>
   ${!allowed(m)?`<div class="card"><p class="big">준비되시면 시작해요</p><p class="muted">이 이야기는 원하실 때만 여쭤봐요.</p><button class="btn pri" id="unlock">이 이야기도 해 볼게요</button></div>`:
-  `<div class="card">${m.fields.map(f=>{const its2=its.filter(i=>i.field===f);return its2.length?its2.map(i=>`<div class="item"><span class="f">${esc(f)} ${i.status==='확정'?'<span class="badge y">확정</span>':'<span class="badge n">확인 전</span>'}</span><span class="v">${esc(i.value)}</span><label class="sw">가족에게 보여주기<input type="checkbox" data-vis="${esc(i.id)}" ${i.visible?'checked':''}></label></div>`).join(''):`<div class="item"><span class="f">${esc(f)}</span><span class="v muted">아직 비어 있어요</span></div>`}).join('')}</div>
+  `<div class="card">${m.fields.map(f=>{const its2=its.filter(i=>i.field===f);return its2.length?its2.map(i=>`<div class="item"><span class="f">${esc(f)} ${i.status==='확정'?'<span class="badge y">확정</span>':'<span class="badge n">확인 전</span>'}</span><span class="v">${esc(i.value)}</span>${i.field==='보험'?insHTML(i.value):''}<label class="sw">가족에게 보여주기<input type="checkbox" data-vis="${esc(i.id)}" ${i.visible?'checked':''}></label></div>`).join(''):`<div class="item"><span class="f">${esc(f)}</span><span class="v muted">아직 비어 있어요</span></div>`}).join('')}</div>
   <a class="btn out" href="#talk">${ic('i-mic',22)}이어서 이야기하기</a>${NEAR[k]?`<a class="card near" href="https://xn--910bqa26dz54h.com/network/?${NEAR[k][0]}" target="_blank" rel="noopener"><span class="lab">가까운 곳 찾기</span><p class="big" style="margin:0">${NEAR[k][1]} →</p></a>`:''}`}`;
   const u=document.getElementById('unlock');if(u)u.onclick=()=>{S.profile.consent[k]=true;if(!S.pending||S.pending.module!==k)S.pending={module:k,field:m.fields[0]};save();noteDetail(k)};
   V.querySelectorAll('[data-vis]').forEach(c=>c.onchange=()=>{const i=S.items.find(x=>x.id===c.dataset.vis);if(i){i.visible=c.checked;save()}});
