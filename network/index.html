@@ -113,7 +113,7 @@ const params=new URLSearchParams(location.search);
 if(params.get('c')){const c=CATS.find(x=>x.k===params.get('c'));if(c)cat=c}
 else if(params.get('g')){const g=GROUPS.find(x=>x.k===params.get('g'));if(g)cat=g.cats[0]}
 function drawChips(){$('groups').innerHTML=GROUPS.map(g=>`<button class="gtab" data-g="${g.k}" aria-pressed="${g.k===cat.g}">${esc(g.l)}</button>`).join('');
-  $('chips').innerHTML=GROUPS.find(g=>g.k===cat.g).cats.map(c=>`<button class="chip" data-k="${c.k}" aria-pressed="${c===cat}">${esc(c.l)}</button>`).join('')}
+  $('chips').innerHTML=GROUPS.find(g=>g.k===cat.g).cats.map(c=>`<button class="chip" data-k="${c.k}" aria-pressed="${c===cat}">${esc(c.l)}</button>`).join('');const on=$('chips').querySelector('[aria-pressed=true]');if(on){const c=$('chips');c.scrollLeft=on.offsetLeft-c.clientWidth/2+on.clientWidth/2}}
 drawChips();
 
 function fallback(){ // 키가 없거나 지도를 못 불러올 때: 카카오맵·네이버지도로 바로 연결
