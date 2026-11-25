@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+<meta charset="utf-8">
 <meta name="robots" content="noindex">
 <meta name="description" content="나날노트 앱 화면을 미리 써 보세요">
 <meta property="og:type" content="website">
@@ -21,7 +22,6 @@
 <link rel="icon" href="/favicon-32.png" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
-<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>나날노트</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -64,7 +64,7 @@ nav.tabs .dot{position:absolute;top:10px;left:calc(50% + 8px);min-width:18px;hei
 .hello{display:flex;align-items:center;gap:18px}
 .ring{position:relative;width:118px;height:118px;flex:none}.ring svg{width:100%;height:100%}
 .ring b{position:absolute;inset:0;display:grid;place-items:center;font-family:'Nanum Myeongjo',serif;font-size:26px}
-.ring small{position:absolute;bottom:26px;width:100%;text-align:center;font-size:11px;color:var(--soft)}
+.ring{overflow:hidden}.ring small{position:absolute;bottom:26px;left:0;right:0;text-align:center;font-size:11px;color:var(--soft)}
 .q{font-family:'Nanum Myeongjo',serif;font-size:23px;font-weight:700;line-height:1.55}
 .mood{display:flex;gap:10px}.mood button{flex:1;min-height:64px;border-radius:8px;border:1px solid var(--line);background:var(--bg);font-size:16px;cursor:pointer;color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
 .mood button[aria-pressed=true]{border-color:var(--gold);background:var(--mint)}
@@ -108,6 +108,21 @@ nav.tabs .dot{position:absolute;top:10px;left:calc(50% + 8px);min-width:18px;hei
 .steps{display:flex;gap:6px;justify-content:center}.steps i{width:28px;height:4px;border-radius:2px;background:var(--line)}.steps i.on{background:var(--gold)}
 .empty{text-align:center;display:grid;gap:14px;justify-items:center;padding:30px 10px}
 .hide{display:none!important}
+html.fs1{zoom:1.12}html.fs2{zoom:1.25}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.seg button{min-height:56px;border:1px solid var(--line);background:var(--paper);border-radius:10px;font:inherit;color:var(--ink);cursor:pointer}.seg button[aria-pressed=true]{background:var(--forest);color:#F4F0E8;border-color:var(--forest)}
+.seg button:nth-child(2){font-size:1.12em}.seg button:nth-child(3){font-size:1.25em}
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis;background:var(--forest);color:#F4F0E8;padding:12px 20px;border-radius:999px;font-size:16px;z-index:9;box-shadow:0 6px 20px rgba(0,0,0,.18)}
+#printArea{display:none}
+@media print{
+  body{background:#fff!important;color:#000}.toast{display:none!important}
+  .app>*:not(#printArea){display:none!important}
+  #printArea{display:block!important;font:12pt/1.6 'Noto Sans KR',sans-serif;color:#000}
+  #printArea h1{font:800 22pt/1.3 'Nanum Myeongjo',serif;margin:0 0 4pt}
+  #printArea h2{font:700 14pt/1.4 'Nanum Myeongjo',serif;border-bottom:1.5pt solid #1C3632;padding-bottom:3pt;margin:16pt 0 6pt;break-after:avoid}
+  #printArea table{width:100%;border-collapse:collapse}#printArea td{border-bottom:.5pt solid #bbb;padding:4pt 6pt;vertical-align:top}#printArea td:first-child{width:28%;color:#444}
+  #printArea .pn{font-size:10pt;color:#555}#printArea section{break-inside:avoid}
+  @page{margin:16mm}
+}
 .flow{display:grid;gap:10px}.fstep{display:flex;gap:12px;align-items:flex-start}.fstep .no{flex:none;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-size:14px;color:var(--soft)}
 .fstep.done .no{background:var(--forest);color:#F4F0E8;border-color:var(--forest)}.fstep.now .no{border-color:var(--gold);color:var(--gold)}
 .wish{border:1px solid var(--line);border-top:3px solid var(--forest);border-radius:6px;padding:18px;display:grid;gap:10px;background:var(--bg)}
@@ -115,6 +130,7 @@ nav.tabs .dot{position:absolute;top:10px;left:calc(50% + 8px);min-width:18px;hei
 .vend{display:grid;gap:8px}.vend label{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:8px;padding:12px;font-weight:400;cursor:pointer}.vend input{width:22px;min-height:22px;height:22px;accent-color:var(--forest)}
 .vend b{font-weight:500}.vend small{color:var(--soft);display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+h1,h2,h3,p,li,label,.q,.big{word-break:keep-all;overflow-wrap:anywhere}h1,h2,h3,.q{text-wrap:balance}
 </style>
 </head>
 <body>
@@ -124,6 +140,9 @@ nav.tabs .dot{position:absolute;top:10px;left:calc(50% + 8px);min-width:18px;hei
 <symbol id="i-sun" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M5 19l1.5-1.5M17.5 6.5L19 5"/></g></symbol>
 <symbol id="i-chat" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 5h16v11H9l-5 4z"/></g></symbol>
 <symbol id="i-book" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5M9 8h6"/></g></symbol>
+<symbol id="i-gear" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></g></symbol>
+<symbol id="i-print" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M7 8V3h10v5"/><rect x="3" y="8" width="18" height="9" rx="2"/><path d="M7 14h10v7H7z"/></g></symbol>
+<symbol id="i-share" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 002 2h10a2 2 0 002-2v-6"/></g></symbol>
 <symbol id="i-check" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></g></symbol>
 <symbol id="i-people" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6M15 15c3 0 6 2 6 5"/></g></symbol>
 <symbol id="i-home" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10M10 20v-5h4v5"/></g></symbol>
@@ -140,7 +159,8 @@ nav.tabs .dot{position:absolute;top:10px;left:calc(50% + 8px);min-width:18px;hei
 </svg>
 <div class="app">
   <div class="top"><svg width="26" height="26" viewBox="0 0 28 28" aria-hidden="true"><rect x="5" y="3" width="18" height="22" rx="2" fill="var(--teal)"/><path d="M8 3v22" stroke="#C9A96E" stroke-width="1.2"/><path d="M12 10h7M12 14h7M12 18h4" stroke="#F4F0E8" stroke-width="1.4" stroke-linecap="round"/></svg><b>나날노트</b>
-    <a class="ibtn" href="#family" id="famBtn" aria-label="가족 화면 미리보기"><svg width="24" height="24"><use href="#i-people"/></svg></a></div>
+    <a class="ibtn" href="#family" id="famBtn" aria-label="가족 화면 미리보기"><svg width="24" height="24"><use href="#i-people"/></svg></a><a class="ibtn" href="#settings" id="setBtn" aria-label="설정" style="margin-left:0"><svg width="24" height="24"><use href="#i-gear"/></svg></a></div>
+  <div id="printArea" aria-hidden="true"></div>
   <main id="view"><p class="muted">불러오는 중…</p></main>
   <nav class="tabs" id="tabs" aria-label="메뉴">
     <a href="#home"><svg width="26" height="26" aria-hidden="true"><use href="#i-sun"/></svg>오늘</a>
@@ -218,10 +238,10 @@ function render(){
   const r=(location.hash||'#home').slice(1);
   const n=pend().length,ct=document.getElementById('checkTab');ct.querySelector('.dot')?.remove();if(n)ct.insertAdjacentHTML('beforeend',`<span class="dot" aria-label="확인할 항목 ${n}개">${n}</span>`);
   document.querySelectorAll('#tabs a').forEach(a=>a.setAttribute('aria-current',(r.startsWith(a.hash.slice(1)))?'page':'false'));
-  const shell=!!S.profile.name;document.getElementById('tabs').classList.toggle('hide',!shell);document.getElementById('famBtn').classList.toggle('hide',!shell);
+  const shell=!!S.profile.name;document.getElementById('tabs').classList.toggle('hide',!shell);document.getElementById('famBtn').classList.toggle('hide',!shell);document.getElementById('setBtn').classList.toggle('hide',!shell);
   if(!shell)return onboard();
   if(r.startsWith('note-'))return noteDetail(r.slice(5));
-  ({home,talk,note,check,family}[r]||home)();
+  ({home,talk,note,check,family,settings}[r]||home)();
 }
 function onboard(){
   const st=ob.step,dots=`<div class="steps">${[0,1,2].map(i=>`<i class="${i<=st?'on':''}"></i>`).join('')}</div>`;
@@ -271,7 +291,24 @@ function talk(){
   if(mic)mic.onclick=()=>{if(D.on){dict.stop().then(()=>{if(D.text.trim())send(D.text)}).catch(()=>{})}else{D.text='';try{tts&&tts.stop()}catch(_){}dict.start().catch(e=>{if(e&&e.code==='not_granted'){dict=null;typing=true;talk()}})}};
 }
 const D={on:false,text:'',base:''};
-function wireDict(){if(!dict)return;
+// 나날노트.com에서는 브라우저 자체 기능으로 말하기·소리 읽기를 한다 (크롬·삼성인터넷·사파리)
+function webDict(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return null;
+  let rec=null,cb={p:()=>{},f:()=>{},s:()=>{}},want=false;
+  const make=()=>{const r=new SR();r.lang='ko-KR';r.continuous=true;r.interimResults=true;
+    r.onresult=e=>{let fin='',mid='';for(let i=e.resultIndex;i<e.results.length;i++){const t=e.results[i][0].transcript;if(e.results[i].isFinal)fin+=t;else mid+=t}if(mid)cb.p({text:mid});if(fin)cb.f({text:fin})};
+    r.onend=()=>{if(want){try{r.start();return}catch(_){}}cb.s({state:'idle'})};
+    r.onerror=e=>{if(e.error==='not-allowed'||e.error==='service-not-allowed'){want=false;cb.s({state:'idle'});dict=null;typing=true;toast('마이크를 쓸 수 없어 글로 받을게요');if((location.hash||'')==='#talk')talk()}};
+    return r};
+  return{start(){want=true;rec=make();return new Promise((ok,no)=>{try{rec.start();cb.s({state:'listening'});ok()}catch(e){no(e)}})},
+    stop(){want=false;return new Promise(ok=>{if(!rec)return ok();const r=rec;r.onend=()=>{cb.s({state:'idle'});ok()};try{r.stop()}catch(_){ok()}setTimeout(ok,1500)})},
+    onPartial(f){cb.p=f},onFinal(f){cb.f=f},onState(f){cb.s=f}}}
+function webTts(){if(!('speechSynthesis' in window))return null;const ss=window.speechSynthesis;
+  const voice=()=>ss.getVoices().find(v=>/ko[-_]KR/i.test(v.lang));
+  return{speak(text){ss.cancel();const parts=String(text).split(/(?<=[.?!요다])\s+/).filter(Boolean);
+      return new Promise(ok=>{parts.forEach((t,i)=>{const u=new SpeechSynthesisUtterance(t);u.lang='ko-KR';const v=voice();if(v)u.voice=v;u.rate=S.rate==='slow'?.8:.95;if(i===parts.length-1)u.onend=()=>ok();ss.speak(u)});if(!parts.length)ok()})},
+    stop(){ss.cancel()}}}
+function toast(t){document.querySelector('.toast')?.remove();const d=document.createElement('div');d.className='toast';d.setAttribute('role','status');d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2600)}
+function wireDict(){if(!dict||dict.__wired)return;try{dict.__wired=true}catch(_){}
   dict.onPartial&&dict.onPartial(({text})=>{const l=document.getElementById('miclab');if(l&&D.on)l.textContent=(D.base+' '+text).trim()||'듣고 있어요…'});
   dict.onFinal&&dict.onFinal(({text})=>{D.base=(D.base+' '+text).trim();D.text=D.base;const l=document.getElementById('miclab');if(l)l.textContent=D.base});
   dict.onState&&dict.onState(({state})=>{const was=D.on;D.on=state==='listening';if(D.on&&!was){D.base='';D.text=''}const w=document.getElementById('wave'),m=document.getElementById('mic'),l=document.getElementById('miclab');if(w)w.classList.toggle('on',D.on);if(m){m.classList.toggle('on',D.on);m.innerHTML=ic(D.on?'i-stop':'i-mic',40);m.setAttribute('aria-label',D.on?'말하기 끝내기':'눌러서 말하기')}if(l&&!D.on&&!busy)l.textContent='누르고 말씀하세요'});
@@ -285,7 +322,7 @@ async function send(raw){
   // 위험 신호: AI를 부르지 않고 정해진 문구 + 전화 버튼
   if(flag){push('alert',ALERT[flag.k](S.profile.name),{call:flag.call});if(S.profile.alertConsent&&flag.k!=='사기의심')push('chip','가족에게 안부 연락을 부탁했어요');save();talk();speakLast();return}
   busy=true;talk();
-  if(!sample){push('ai','고맙습니다. 잘 들었어요. (미리보기라 AI 정리는 정식 오픈 때 켜져요)');busy=false;save();talk();return}
+  if(!sample){basicReply(text);busy=false;save();talk();speakLast();return}
   const af=MODS.filter(allowed).map(m=>`${m.k}(${m.name}): ${m.fields.join(', ')}`).join('\n');
   const rem=[];MODS.forEach(m=>allowed(m)&&m.fields.forEach(f=>!has(m.k,f)&&rem.push(`${m.k}/${f}`)));
   const hist=S.chat.filter(m=>m.role==='ai'||m.role==='me').slice(-10).map(m=>(m.role==='ai'?'AI: ':'어르신: ')+m.text).join('\n');
@@ -326,12 +363,69 @@ items에는 답에서 실제로 나온 내용만 넣고, 없으면 빈 배열. "
   }catch(e){push('ai',e&&e.code==='rate_limited'?'잠시 쉬었다가 다시 이야기해요.':'제가 잠깐 놓쳤어요. 한 번만 다시 말씀해 주시겠어요?')}
   busy=false;save();if((location.hash||'#home')==='#talk')talk();else render();speakLast();
 }
+// AI 없이 동작하는 기본 정리: 방금 물은 항목에 답을 그대로 적고, 일요일 확인으로 보낸다
+const THANKS=['말씀 고마워요.','잘 들었어요.','귀한 이야기 고마워요.','그렇군요, 잘 알겠어요.'];
+function basicReply(text){const n=S.profile.name,pf=S.pending,t=text.trim(),m=pf&&modOf(pf.module);
+  const say=x=>push('ai',x);
+  if(/^(다음에|나중에|패스|넘어가|건너뛰|몰라|모르겠|글쎄)/.test(t.replace(/\s/g,''))){skipQuiet();return}
+  if(!pf){say(`${n}, ${THANKS[S.days.length%THANKS.length]} 오늘 이야기는 여기까지 해도 좋아요.`);return}
+  if(t.replace(/\s/g,'').length<2){say(`${n}, 한 번만 더 말씀해 주시겠어요? ${QB[pf.field]}`);return}
+  let value=(/^(없어|없다|없음|없습니다|없어요|안\s?했|안\s?해)/.test(t)?'없음':t).slice(0,200);
+  if(LOC.has(pf.field))value=value.replace(/\d{5,}/g,'[번호 가림]');
+  const ex=S.items.find(i=>i.module===pf.module&&i.field===pf.field);
+  if(ex&&ex.status==='확정'&&!similar(ex.value,value))ex.pending={value,quote:t.slice(0,200),at:today()};
+  else if(ex){ex.value=value;ex.quote=t.slice(0,200);ex.at=today()}
+  else S.items.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),module:pf.module,field:pf.field,value,quote:t.slice(0,200),certainty:'확실',status:'미확인',visible:false,at:today()});
+  push('chip',`${m.name} · ${pf.field}에 적었어요`);
+  const nx=candidates().find(c=>c.field!==pf.field)||null;setPending(nx);
+  say(`${THANKS[(S.items.length+S.days.length)%THANKS.length]} ${nx?QB[nx.field]:'오늘 준비한 질문은 다 했어요. 일요일에 확인 탭에서 한 번만 봐 주세요.'}`)}
+function skipQuiet(){const c=S.pending,n=candidates().find(x=>!c||x.field!==c.field)||null;setPending(n);push('ai',n?`괜찮아요, 나중에 여쭐게요. 그럼 이건 어떠세요? ${QB[n.field]}`:'괜찮아요. 오늘은 여기까지 해요.')}
+
+// ── 인쇄 · 가족에게 보내기 ──
+function printNote(){const pa=document.getElementById('printArea');const d=new Date().toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric'});
+  pa.innerHTML=`<h1>${esc(S.profile.name)}의 나날노트</h1><p class="pn">${esc(d)} 기준 · 나날노트.com · 이 노트는 유언장이 아니며 법적 효력이 없습니다.</p>`+
+   MODS.map(m=>{const its=S.items.filter(i=>i.module===m.k);if(!its.length)return'';return`<section><h2>${esc(m.name)}</h2><table>${its.map(i=>`<tr><td>${esc(i.field)}</td><td>${esc(i.value)}${i.status!=='확정'?' <span class="pn">(확인 전)</span>':''}</td></tr>`).join('')}</table></section>`}).join('')||'<p>아직 적힌 내용이 없어요.</p>';
+  window.print()}
+async function shareFamily(){const vis=S.items.filter(i=>i.visible);if(!vis.length){toast('먼저 노트에서 보여줄 항목을 켜 주세요');return}
+  const text=`[${S.profile.name}의 나날노트]\n`+vis.map(i=>`· ${modOf(i.module)?.name} - ${i.field}: ${i.value}`).join('\n')+`\n\n나날노트.com`;
+  try{if(navigator.share){await navigator.share({title:'나날노트',text});return}}catch(e){if(e&&e.name==='AbortError')return}
+  try{await navigator.clipboard.writeText(text);toast('복사했어요. 카톡에 붙여 넣으세요')}catch(_){toast('이 기기에서는 보내기를 쓸 수 없어요')}}
+
+// ── 설정 ──
+function applyFs(){const h=document.documentElement;h.classList.remove('fs1','fs2');if(S.fs)h.classList.add('fs'+S.fs)}
+function settings(){
+  V.innerHTML=`<a class="btn ghost" href="#home" style="align-self:flex-start">${ic('i-back',20)}돌아가기</a><h1>설정</h1>
+  <div class="card"><span class="lab">글자 크기</span><div class="seg">${['보통','크게','아주 크게'].map((t,i)=>`<button data-fs="${i}" aria-pressed="${(S.fs||0)===i}">${t}</button>`).join('')}</div></div>
+  <div class="card"><label for="nm">어떻게 불러드릴까요?<input id="nm" value="${esc(S.profile.name)}"></label><button class="btn out" id="nmS">호칭 바꾸기</button></div>
+  <div class="card"><span class="lab">소리</span>${tts?`<label class="sw" style="color:var(--ink)">AI 말을 소리로 읽어 주기<input type="checkbox" id="sTts" ${S.tts?'checked':''}></label>
+    <div class="seg" style="grid-template-columns:1fr 1fr"><button data-rate="slow" aria-pressed="${S.rate==='slow'}">천천히</button><button data-rate="normal" aria-pressed="${S.rate!=='slow'}">보통</button></div>
+    <button class="btn ghost" id="sTest">${ic('i-speaker',20)}들어 보기</button>`:'<p class="muted">이 기기에서는 소리 읽기를 쓸 수 없어요.</p>'}
+    <p class="muted">${dict?'말로 대답하기를 쓸 수 있어요.':'이 기기에서는 말로 대답하기를 쓸 수 없어 글로 받아요.'}</p></div>
+  <div class="card"><label class="sw" style="color:var(--ink)">힘들거나 3일 동안 말이 없으면 가족에게 안부 연락 부탁하기<input type="checkbox" id="sCons" ${S.profile.alertConsent?'checked':''}></label><p class="muted">무슨 말을 했는지는 가족에게 가지 않아요.</p></div>
+  <div class="card"><span class="lab">내 노트 지키기</span><p class="muted">노트는 이 기기에만 저장돼요. 폰을 바꾸기 전에 파일로 저장해 두세요.</p>
+    <button class="btn out" id="bk">${ic('i-share',20)}파일로 저장하기</button><label class="btn ghost" style="justify-content:center">파일에서 불러오기<input type="file" id="rs" accept="application/json,.json" class="hide"></label>
+    <button class="btn ghost" id="pr">${ic('i-print',20)}종이로 뽑기</button></div>
+  <div class="card"><button class="btn ghost" id="wipe" style="color:var(--red)">이 기기의 나날노트 모두 지우기</button></div>
+  <p class="muted" style="text-align:center"><a href="https://xn--910bqa26dz54h.com/privacy/" style="color:inherit">개인정보 처리방침</a> · 운영 주식회사 아투아</p>`;
+  const $=id=>document.getElementById(id);
+  V.querySelectorAll('[data-fs]').forEach(b=>b.onclick=()=>{S.fs=+b.dataset.fs;applyFs();save();settings()});
+  $('nmS').onclick=()=>{const v=$('nm').value.trim().slice(0,20);if(v){S.profile.name=v;save();toast('호칭을 바꿨어요')}};
+  if($('sTts'))$('sTts').onchange=e=>{S.tts=e.target.checked;save()};
+  V.querySelectorAll('[data-rate]').forEach(b=>b.onclick=()=>{S.rate=b.dataset.rate;save();settings()});
+  if($('sTest'))$('sTest').onclick=()=>tts.speak(`${S.profile.name}, 안녕하세요. 이렇게 읽어 드릴게요.`).catch(()=>{});
+  $('sCons').onchange=e=>{S.profile.alertConsent=e.target.checked;save()};
+  $('bk').onclick=()=>{const b=new Blob([JSON.stringify({app:'nanalnote',v:3,at:new Date().toISOString(),data:S},null,1)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`nanalnote-backup-${today()}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000);toast('파일로 저장했어요')};
+  $('rs').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const j=JSON.parse(await f.text());const d=j&&j.app==='nanalnote'?j.data:null;if(!d||!d.profile||!Array.isArray(d.items))throw 0;
+    if(!confirm('지금 노트를 이 파일 내용으로 바꿀까요?'))return;S=Object.assign(blank(),d);save();applyFs();toast('불러왔어요');location.hash='#home'}catch(_){toast('나날노트 파일이 아니에요')}};
+  $('pr').onclick=printNote;
+  $('wipe').onclick=()=>{if(!confirm('이 기기에 저장된 나날노트를 모두 지울까요? 되돌릴 수 없어요.'))return;S=blank();ob={step:0,name:'',family:''};try{localStorage.removeItem('nanal')}catch(_){}save();applyFs();history.replaceState(null,'',location.pathname);render()};
+}
 function note(){
   V.innerHTML=`<div class="hello"><div class="ring">${ring()}<b>${total()}%</b><small>전체</small></div><div><h1>${esc(S.profile.name)}의<br>나날노트</h1></div></div>
   <div class="mods">${MODS.map(m=>{const p=progress(m),lk=!allowed(m);return`<a class="mod${lk?' locked':''}" href="#note-${m.k}"><div class="mini">${mini(lk?0:p)}<span>${ic(lk?'i-lock':m.ic,26)}</span></div><b>${esc(m.name)}</b><span class="pct">${lk?'원하실 때만':p+'%'}</span></a>`}).join('')}</div>
-  <div class="card"><label class="sw" style="color:var(--ink);font-size:17px">힘들거나 3일 동안 말이 없으면 가족에게 안부 연락 부탁하기<input type="checkbox" id="acons" ${S.profile.alertConsent?'checked':''}></label><p class="muted">무슨 말을 했는지는 가족에게 가지 않아요.</p></div>
+  <div class="row"><button class="btn out" id="nShare">${ic('i-share',20)}가족에게 보내기</button><button class="btn out" id="nPrint">${ic('i-print',20)}종이로 뽑기</button></div>
   <p class="banner">나날노트는 유언장이 아닙니다. 법적 효력이 필요한 내용은 따로 안내해 드려요.</p>`;
-  document.getElementById('acons').onchange=e=>{S.profile.alertConsent=e.target.checked;save()};
+  document.getElementById('nShare').onclick=shareFamily;document.getElementById('nPrint').onclick=printNote;
 }
 function noteDetail(k){
   const m=modOf(k);if(!m){location.hash='#note';return}
@@ -421,7 +515,8 @@ window.addEventListener('hashchange',()=>{if(location.hash==='#check')ci=0;rende
       if(db&&uid){ref=db.doc('data/users/'+uid+'/nanal');const snap=await ref.get();if(snap.exists)S=Object.assign(blank(),snap.data())}else local();
     }else local();
   }catch(e){}
-  if(!S.profile.since)S.profile.since=S.days[0]||today();if(!S.asked)S.asked=[];S.v=3;
+  if(!dict)dict=webDict();if(!tts)tts=webTts();wireDict();
+  if(!S.profile.since)S.profile.since=S.days[0]||today();if(!S.asked)S.asked=[];S.v=3;applyFs();
   clearTimeout(timer);loaded=true;render();
 })();
 }
