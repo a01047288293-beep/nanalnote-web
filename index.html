@@ -226,7 +226,7 @@ footer .wrap{display:flex;gap:20px;flex-wrap:wrap;justify-content:space-between}
   </div>
   <div class="two">
     <div><h3>입점 업종</h3><div class="chips" id="biz"></div><p style="color:var(--soft);font-size:16px">가격 공개 · 서류 심사 · 약정 체결 후 노출됩니다.</p></div>
-    <form id="partnerForm" novalidate>
+    <form id="partnerForm" novalidate><input name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px">
       <h3>입점 신청</h3>
       <div class="grid2"><label for="p-name">업체명<input id="p-name" name="company" required autocomplete="organization"></label><label for="p-type">업종<select id="p-type" name="type" required><option value="">선택</option></select></label></div>
       <div class="grid2"><label for="p-region">지역<input id="p-region" name="region" required placeholder="광주 남구"></label><label for="p-phone">연락처<input id="p-phone" name="phone" required inputmode="tel" autocomplete="tel"></label></div>
@@ -239,7 +239,7 @@ footer .wrap{display:flex;gap:20px;flex-wrap:wrap;justify-content:space-between}
 
 <section class="band" id="apply"><div class="wrap two">
   <div class="head"><h2>먼저 써보실 분을 모십니다</h2><p>파일럿 기간 무료. 자녀분이 대신 신청하셔도 됩니다.</p></div>
-  <form id="applyForm" novalidate>
+  <form id="applyForm" novalidate><input name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px">
     <h3>사전 신청</h3>
     <div class="grid2"><label for="a-who">신청자<select id="a-who" name="who" required><option value="">선택</option><option>본인</option><option>자녀·가족</option><option>복지관·기관</option></select></label><label for="a-name">이름<input id="a-name" name="name" required autocomplete="name"></label></div>
     <div class="grid2"><label for="a-phone">연락처<input id="a-phone" name="phone" required inputmode="tel" autocomplete="tel"></label><label for="a-region">지역<input id="a-region" name="region" required placeholder="광주 남구"></label></div>
@@ -281,14 +281,21 @@ function wire(id,coll,label){
     e.preventDefault();msg.className='msg';
     const miss=[...f.querySelectorAll('[required]')].find(el=>el.type==='checkbox'?!el.checked:!el.value.trim());
     if(miss){msg.textContent='빈칸을 채워 주세요.';msg.className='msg err';miss.focus();return}
-    if(!db||!uid){msg.textContent='사전 신청은 곧 열립니다. 조금만 기다려 주세요.';msg.className='msg err';return}
     const data=Object.fromEntries(new FormData(f));delete data.agree;
+    if(!db||!uid){ // 나날노트.com: 구글 시트로 접수
+      if(!FORM_URL){msg.textContent='사전 신청은 곧 열립니다. 조금만 기다려 주세요.';msg.className='msg err';return}
+      btn.disabled=true;btn.textContent='보내는 중…';
+      try{await fetch(FORM_URL,{method:'POST',mode:'no-cors',body:new URLSearchParams({...data,kind:coll==='partners'?'partner':'apply',agree:'yes'})});
+        f.reset();msg.textContent='접수되었습니다. 곧 연락드리겠습니다.';msg.className='msg ok'}
+      catch(err){msg.textContent='보내지 못했습니다. 인터넷 연결을 확인하고 다시 눌러 주세요.';msg.className='msg err'}
+      btn.disabled=false;btn.textContent=label;return}
     btn.disabled=true;btn.textContent='보내는 중…';
     try{await db.doc(coll+'/'+uid).set({...data,agreed:true,at:new Date().toISOString()});msg.textContent='접수되었습니다. 곧 연락드리겠습니다.';msg.className='msg ok'}
     catch(err){msg.textContent='보내지 못했습니다. 잠시 후 다시 시도해 주세요.';msg.className='msg err'}
     btn.disabled=false;btn.textContent=label;
   });
 }
+const FORM_URL='https://script.google.com/macros/s/AKfycbyVd23dfHN4vKUPJQPOwYkJKci4AVg7as6mpCcgAcb0d0wjDStfuy_C54fZEQmlY9oMeA/exec'; // 구글 시트 '나날노트 신청 접수 (홈페이지)'
 wire('applyForm','signups','사전 신청');wire('partnerForm','partners','입점 신청');
 let rowsS=[],rowsP=[];const d10=x=>String(x||'').slice(0,10);
 async function loadAdmin(){const m=document.getElementById('admMsg');m.textContent='불러오는 중…';
