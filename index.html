@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta name="description" content="하루 10분 대화로 인생 이야기와 가족에게 남길 것을 정리하는 AI 노트">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="나날노트">
+<meta property="og:title" content="나날노트 — 말하면, 정리됩니다">
+<meta property="og:description" content="하루 10분 대화로 인생 이야기와 가족에게 남길 것을 정리하는 AI 노트">
+<meta property="og:url" content="https://xn--910bqa26dz54h.com/">
+<link rel="canonical" href="https://xn--910bqa26dz54h.com/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Crect x='5' y='3' width='18' height='22' rx='2' fill='%231C3632'/%3E%3Cpath d='M8 3v22' stroke='%23C9A96E' stroke-width='1.2'/%3E%3Cpath d='M12 10h7M12 14h7M12 18h4' stroke='%23F4F0E8' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E">
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>나날노트</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700;800&family=Noto+Sans+KR:wght@300;400;500;700&display=swap">
+<style>
+/* VOICE: 짧고 품격 있게, 읽기보다 보는 페이지
+   IDEA: 목소리가 AI를 지나 수첩 한 장이 되는 흐름 — 정밀한 기계 안의 따뜻한 기록
+   PICTURE: 음파 → AI 코어 → 나날노트로 이어지는 움직이는 도식
+   COLOUR and TYPE: 아이보리, 깊은 숲녹색, 금색 선 / 나눔명조 제목 + 노토 산스
+   LAYOUT: 섹션마다 그림 하나와 한 줄, 넓은 여백 */
+:root{color-scheme:light dark;--bg:light-dark(#F4F0E8,#0E1312);--paper:light-dark(#FBF9F4,#151B1A);--ink:light-dark(#1A1F1E,#ECE7DC);--soft:light-dark(#575D5B,#A8AFAC);--line:light-dark(#DDD4C4,#28312F);--forest:#1C3632;--teal:light-dark(#1E3A36,#A9CFC7);--gold:light-dark(#9A7A42,#CBAE74);--goldsoft:#C9A96E;--mint:light-dark(#E7ECE8,#1B2A27);--warnbg:light-dark(#F3ECDD,#2A2419);--warn:light-dark(#7A5A24,#D9BE86)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html{scroll-padding-top:80px;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.7 'Noto Sans KR',system-ui,sans-serif;overflow-x:clip;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:'Nanum Myeongjo',serif;font-weight:800;line-height:1.25;letter-spacing:-.01em;text-wrap:balance;margin:0}
+h2{font-size:clamp(28px,3.4vw,40px)}h3{font-size:19px;font-weight:700}
+p{margin:0}a{color:var(--teal)}
+.wrap{max-width:1160px;margin:0 auto}
+.band{padding:clamp(64px,8vw,112px) max(6vw,20px)}
+.head{text-align:center;max-width:640px;margin:0 auto 44px}.head p{color:var(--soft);margin-top:14px;font-size:18px}
+.head h2::after{content:"";display:block;width:40px;height:1px;background:var(--gold);margin:20px auto 0}
+nav.top{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav.top .wrap{display:flex;align-items:center;gap:24px;flex-wrap:wrap;padding:14px max(6vw,20px)}
+.logo{font-family:'Nanum Myeongjo',serif;font-weight:800;font-size:22px;color:var(--ink);text-decoration:none;display:flex;align-items:center;gap:10px}
+.links{display:flex;gap:24px;flex-wrap:wrap;margin-left:auto;align-items:center}.links a{color:var(--ink);text-decoration:none;font-size:16px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:54px;padding:0 26px;border-radius:4px;border:0;font:500 18px 'Noto Sans KR',sans-serif;cursor:pointer;text-decoration:none}
+.btn.main{background:var(--forest);color:#F4F0E8;box-shadow:inset 0 0 0 1px rgba(201,169,110,.55)}.btn.sub{color:var(--ink);border:1px solid var(--gold)}
+.btn.small{min-height:44px;font-size:15px;padding:0 18px}
+.btn:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+/* hero */
+.hero{text-align:center;padding-bottom:40px;background:radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--gold) 28%,transparent) 1px,transparent 0) 0 0/26px 26px}
+.hero h1{font-size:clamp(42px,6vw,72px)}.hero .sub{color:var(--soft);font-size:clamp(18px,2vw,21px);margin-top:18px}
+.hero .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:30px}
+.pipe{display:grid;grid-template-columns:minmax(0,1fr) 70px minmax(0,1fr) 70px minmax(0,1.2fr);align-items:center;max-width:1000px;margin:56px auto 0;text-align:left}
+.node{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:22px;min-height:220px;display:flex;flex-direction:column;gap:14px;box-shadow:0 30px 60px -40px rgba(20,30,28,.5)}
+.node .t{font-size:13px;letter-spacing:.06em;color:var(--gold);font-weight:500}
+.wave{display:flex;align-items:center;gap:4px;height:70px}.wave i{flex:1;background:var(--forest);border-radius:2px;height:20%;animation:w 1.2s ease-in-out infinite}
+@keyframes w{50%{height:90%}}
+.quote{font-size:15px;color:var(--soft);border-left:1px solid var(--gold);padding-left:10px}
+.link{height:2px;background:repeating-linear-gradient(90deg,var(--gold) 0 6px,transparent 6px 12px);background-size:24px 2px;animation:flow 1s linear infinite;position:relative}
+.link::after{content:"";position:absolute;right:-2px;top:-4px;border:5px solid transparent;border-left:7px solid var(--gold)}
+@keyframes flow{to{background-position:24px 0}}
+.core{align-items:center;justify-content:center;background:var(--forest);color:#F4F0E8;border-color:rgba(201,169,110,.5)}
+.core svg{width:110px;height:110px}.core .t{color:var(--goldsoft)}
+.orbit{transform-origin:55px 55px;animation:spin 8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.out{display:grid;gap:8px}.out div{display:flex;justify-content:space-between;gap:10px;font-size:15px;border-bottom:1px solid var(--line);padding-bottom:6px;opacity:0;animation:in 6s infinite}
+.out div:nth-child(2){animation-delay:.6s}.out div:nth-child(3){animation-delay:1.2s}.out div:nth-child(4){animation-delay:1.8s}
+.out span{color:var(--soft)}.out b{font-weight:500}
+@keyframes in{8%,85%{opacity:1}0%,95%,100%{opacity:0}}
+.cap{font-size:13px;color:var(--soft);margin-top:18px}
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;counter-reset:s}
+.step{text-align:center;padding:10px}
+.ic{width:84px;height:84px;margin:0 auto 18px;border-radius:50%;border:1px solid var(--gold);display:grid;place-items:center;color:var(--teal);background:var(--paper)}
+.step p{color:var(--soft);font-size:16px;margin-top:6px}
+.step .k{font-family:'Nanum Myeongjo',serif;color:var(--gold);font-size:15px;display:block;margin-bottom:4px}
+/* modules */
+.mods{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:12px}
+.mod{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:22px 10px;text-align:center;display:grid;gap:10px;justify-items:center;position:relative}
+.mod svg{color:var(--teal)}.mod b{font-size:15px;font-weight:500;line-height:1.4}
+.mod .lk{position:absolute;top:8px;right:8px;color:var(--gold)}
+/* tech */
+.dark{background:var(--forest);color:#ECE7DC}.dark .head p{color:#B9C8C3}.dark h2{color:#F4F0E8}.dark .head h2::after{background:var(--goldsoft)}
+.tech{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.tc{border:1px solid rgba(201,169,110,.35);border-radius:8px;padding:24px;display:grid;gap:14px;background:rgba(255,255,255,.03)}
+.tc .viz{height:84px;display:grid;place-items:center}
+.tc h3{color:#F4F0E8}.tc p{font-size:15px;color:#B9C8C3}
+.tags{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}.tags span{font-size:12px;border:1px solid rgba(201,169,110,.5);color:#E2D3AE;border-radius:999px;padding:2px 9px}
+/* family */
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(32px,5vw,72px);align-items:center}
+.two .head{text-align:left;margin:0}.two .head h2::after{margin-left:0}
+.perm{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px 22px}
+.pr{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 0;border-bottom:1px solid var(--line);font-size:17px}.pr:last-child{border:0}
+.sw{width:50px;height:28px;border-radius:14px;background:var(--line);position:relative;flex:none}.sw::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.sw.on{background:var(--forest)}.sw.on::after{left:25px}
+.pr em{font-style:normal;font-size:13px;color:var(--gold);display:flex;align-items:center;gap:6px}
+/* promises */
+.prom{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.pm{text-align:center;display:grid;gap:12px;justify-items:center}.pm b{font-weight:500;font-size:17px}
+/* partner flow */
+.flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;margin-bottom:40px}
+.fs{text-align:center;position:relative;padding:0 6px}
+.fs .ic{width:66px;height:66px;margin-bottom:12px}.fs b{font-size:15px;font-weight:500;display:block}
+.fs:not(:last-child)::after{content:"";position:absolute;top:33px;left:calc(50% + 40px);right:calc(-50% + 40px);height:1px;background:var(--gold)}
+.fs.hl .ic{background:var(--forest);color:#F4F0E8;border-color:var(--forest)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:24px 0}.chips span{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:6px 14px;font-size:15px}
+/* forms */
+form{background:var(--paper);border:1px solid var(--line);border-top:2px solid var(--gold);border-radius:6px;padding:clamp(22px,3vw,34px);display:grid;gap:16px}
+label{display:grid;gap:6px;font-weight:500;font-size:16px}
+input,select{font:16px 'Noto Sans KR',sans-serif;min-height:52px;padding:10px 14px;border-radius:4px;border:1px solid var(--line);background:var(--bg);color:var(--ink);width:100%}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.check{display:flex;gap:10px;align-items:center;font-weight:400;font-size:14px;color:var(--soft)}.check input{width:22px;min-height:22px;height:22px;flex:none;accent-color:var(--forest)}
+.msg{font-size:15px;border-radius:4px;padding:10px 14px;display:none}.msg.ok{display:block;background:var(--mint);color:var(--teal)}.msg.err{display:block;background:var(--warnbg);color:var(--warn)}
+details{border-bottom:1px solid var(--line);padding:20px 0}
+summary{cursor:pointer;font-weight:500;font-size:18px;list-style:none;display:flex;justify-content:space-between;gap:12px}
+summary::after{content:"+";color:var(--gold);font-size:24px;line-height:1}details[open] summary::after{content:"–"}
+details p{color:var(--soft);margin-top:10px;font-size:16px}
+footer{background:var(--forest);color:#B9C8C3;padding:36px max(6vw,20px);font-size:14px}
+footer .wrap{display:flex;gap:20px;flex-wrap:wrap;justify-content:space-between}footer b{font-family:'Nanum Myeongjo',serif;color:#F4F0E8;font-size:17px}
+.hide{display:none!important}
+.adm table{width:100%;border-collapse:collapse;font-size:15px}.adm th{text-align:left;font-weight:500;font-size:13px;color:var(--soft);border-bottom:1px solid var(--gold);padding:8px}.adm td{border-bottom:1px solid var(--line);padding:8px;vertical-align:top}.adm .scroll{overflow-x:auto}.adm .bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:16px 0}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}.out div{opacity:1}.wave i{height:60%}html{scroll-behavior:auto}}
+@media(max-width:960px){.mods{grid-template-columns:repeat(4,minmax(0,1fr))}.tech,.prom{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:820px){.pipe{grid-template-columns:minmax(0,1fr);gap:0}.link{width:2px;height:36px;margin:0 auto;background:repeating-linear-gradient(180deg,var(--gold) 0 6px,transparent 6px 12px)}.link::after{right:-4px;top:auto;bottom:-6px;border:5px solid transparent;border-top:7px solid var(--gold)}.node{min-height:0}.two{grid-template-columns:minmax(0,1fr)}.flow{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:24px}.fs::after{display:none}}
+@media(max-width:600px){.links a:not(.btn){display:none}.steps{grid-template-columns:minmax(0,1fr)}.mods{grid-template-columns:repeat(2,minmax(0,1fr))}.tech,.prom,.grid2{grid-template-columns:minmax(0,1fr)}.flow{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-mic" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></g></symbol>
+  <symbol id="i-ai" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/><circle cx="12" cy="12" r="2"/></g></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 3h11l3 3v15H5z"/><path d="M8.5 13l2.5 2.5 4.5-5"/></g></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></g></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5M9 8h6"/></g></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10M10 20v-5h4v5"/></g></symbol>
+  <symbol id="i-coin" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3 3 7 3s7-1.3 7-3v-6"/></g></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/><path d="M8.5 11h2l1-2 1.5 4 1-2h1.5"/></g></symbol>
+  <symbol id="i-flower" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="8" r="2.5"/><path d="M12 5.5C12 3 9.5 2 9.5 2M12 10.5V22M12 16c-3 0-5-2-5-4 2 0 5 1 5 4zM12 18c3 0 5-2 5-4-2 0-5 1-5 4z"/></g></symbol>
+  <symbol id="i-cloud" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M7 18h10a4 4 0 0 0 .5-8A6 6 0 0 0 6 9.5 4.3 4.3 0 0 0 7 18z"/></g></symbol>
+  <symbol id="i-letter" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></g></symbol>
+  <symbol id="i-people" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6M15 15c3 0 6 2 6 5"/></g></symbol>
+  <symbol id="i-hash" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 10h2M11 10h2M15 10h2M7 14h10"/><path d="M4 20L20 4"/></g></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></g></symbol>
+  <symbol id="i-hand" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M6 6l12 12"/></g></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></g></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 21h4"/></g></symbol>
+  <symbol id="i-key" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3"/></g></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 3h9l4 4v14H6z"/><path d="M9 11h7M9 15h7"/></g></symbol>
+  <symbol id="i-box" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 8l9-5 9 5v8l-9 5-9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></g></symbol>
+</svg>
+
+<nav class="top"><div class="wrap">
+  <a class="logo" href="#top"><svg width="26" height="26" viewBox="0 0 28 28" aria-hidden="true"><rect x="5" y="3" width="18" height="22" rx="2" fill="var(--teal)"/><path d="M8 3v22" stroke="#C9A96E" stroke-width="1.2"/><path d="M12 10h7M12 14h7M12 18h4" stroke="#F4F0E8" stroke-width="1.4" stroke-linecap="round"/></svg>나날노트</a>
+  <div class="links"><a href="#how">이용 방법</a><a href="#tech">AI 기술</a><a href="#partner">업체 입점</a><a href="/app/">앱 미리보기</a><a href="#admin" id="admLink" class="hide">관리</a><a class="btn main small" href="#apply">사전 신청</a></div>
+</div></nav>
+
+<header class="band hero" id="top"><div class="wrap">
+  <h1>말하면, 정리됩니다</h1>
+  <p class="sub">하루 10분 대화로 완성하는 나의 나날노트</p>
+  <div class="cta"><a class="btn main" href="#apply">사전 신청</a><a class="btn sub" href="#how">어떻게 되나요?</a></div>
+  <div class="pipe" role="img" aria-label="어르신의 목소리가 AI를 거쳐 나날노트 항목으로 정리되는 과정">
+    <div class="node"><span class="t">① 목소리</span><div class="wave" id="wave"></div><p class="quote">“농협이지. 보험도 하나 들었어.”</p></div>
+    <div class="link"></div>
+    <div class="node core"><span class="t">② AI 정리</span><svg viewBox="0 0 110 110" aria-hidden="true"><circle cx="55" cy="55" r="50" fill="none" stroke="rgba(201,169,110,.35)"/><g class="orbit"><circle cx="55" cy="55" r="36" fill="none" stroke="#C9A96E" stroke-dasharray="4 8"/><circle cx="91" cy="55" r="4" fill="#C9A96E"/></g><circle cx="55" cy="55" r="18" fill="none" stroke="#F4F0E8"/><circle cx="55" cy="55" r="5" fill="#F4F0E8"/></svg></div>
+    <div class="link"></div>
+    <div class="node"><span class="t">③ 나날노트</span><div class="out"><div><span>재산·금융</span><b>농협 예금</b></div><div><span>재산·보험</span><b>농협생명 1건</b></div><div><span>다음 질문</span><b>증서 위치</b></div><div><span>번호 정보</span><b>저장 안 함</b></div></div></div>
+  </div>
+  <p class="cap">예시 화면입니다.</p>
+</div></header>
+
+<section class="band" id="how"><div class="wrap">
+  <div class="head"><h2>세 걸음이면 됩니다</h2></div>
+  <div class="steps">
+    <div class="step"><div class="ic"><svg width="34" height="34"><use href="#i-mic"/></svg></div><span class="k">하나</span><h3>말로 대답</h3><p>하루 질문 하나</p></div>
+    <div class="step"><div class="ic"><svg width="34" height="34"><use href="#i-ai"/></svg></div><span class="k">둘</span><h3>AI가 정리</h3><p>항목별 자동 분류</p></div>
+    <div class="step"><div class="ic"><svg width="34" height="34"><use href="#i-check"/></svg></div><span class="k">셋</span><h3>일요일에 확인</h3><p>맞아요 한 번이면 확정</p></div>
+  </div>
+</div></section>
+
+<section class="band" style="padding-top:0"><div class="wrap">
+  <div class="head"><h2>일곱 장으로 완성되는 노트</h2></div>
+  <div class="mods" id="mods"></div>
+</div></section>
+
+<section class="band dark" id="tech"><div class="wrap">
+  <div class="head"><h2>보이지 않는 곳에서 일하는 AI</h2><p>어르신은 말씀만 하세요. 나머지는 기술이 맡습니다.</p></div>
+  <div class="tech">
+    <div class="tc"><div class="viz"><svg width="140" height="60" viewBox="0 0 140 60" aria-hidden="true"><g stroke="#C9A96E" stroke-width="3" stroke-linecap="round"><path d="M10 30v0M22 22v16M34 12v36M46 20v20M58 6v48M70 18v24M82 10v40M94 22v16M106 14v32M118 24v12M130 30v0"/></g></svg></div><h3>음성 인식</h3><div class="tags"><span>사투리</span><span>느린 말</span><span>되묻기</span></div></div>
+    <div class="tc"><div class="viz"><svg width="140" height="74" viewBox="0 0 140 74" aria-hidden="true"><circle cx="20" cy="37" r="8" fill="#C9A96E"/><g stroke="rgba(201,169,110,.6)" fill="none"><path d="M28 37C60 37 70 8 110 8M28 37h82M28 37C60 37 70 66 110 66"/></g><g fill="none" stroke="#F4F0E8"><rect x="110" y="1" width="26" height="14" rx="3"/><rect x="110" y="30" width="26" height="14" rx="3"/><rect x="110" y="59" width="26" height="14" rx="3"/></g></svg></div><h3>자동 분류</h3><div class="tags"><span>7개 항목</span><span>확신도 표시</span></div></div>
+    <div class="tc"><div class="viz"><svg width="84" height="84" viewBox="0 0 84 84" aria-hidden="true"><circle cx="42" cy="42" r="34" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="8"/><circle cx="42" cy="42" r="34" fill="none" stroke="#C9A96E" stroke-width="8" stroke-dasharray="111 214" stroke-linecap="round" transform="rotate(-90 42 42)"/><text x="42" y="48" text-anchor="middle" fill="#F4F0E8" font-size="18" font-family="Noto Sans KR">52%</text></svg></div><h3>빈칸 재질문</h3><div class="tags"><span>빠진 곳 추적</span><span>다음 날 이어서</span></div></div>
+    <div class="tc"><div class="viz"><svg width="84" height="84" viewBox="0 0 24 24" aria-hidden="true" style="color:#C9A96E"><use href="#i-shield"/></svg></div><h3>안전 감지</h3><div class="tags"><span>번호 자동 가림</span><span>위기 신호</span><span>109·119·112</span></div></div>
+  </div>
+</div></section>
+
+<section class="band"><div class="wrap two">
+  <div class="head"><h2>보여줄지는 어르신이 정합니다</h2><p>항목마다 켜고 끄는 공개 설정. 민감한 내용은 대리인 두 분이 확인한 뒤에야 열립니다.</p></div>
+  <div class="perm" role="img" aria-label="항목별 가족 공개 설정 예시">
+    <div class="pr"><span>인생 이야기</span><i class="sw on"></i></div>
+    <div class="pr"><span>손주에게 남긴 음성 편지</span><i class="sw on"></i></div>
+    <div class="pr"><span>재산·계약 지도</span><em><svg width="16" height="16"><use href="#i-lock"/></svg>2인 승인 후</em></div>
+    <div class="pr"><span>장례·사후 희망</span><em><svg width="16" height="16"><use href="#i-lock"/></svg>2인 승인 후</em></div>
+    <div class="pr"><span>디지털 유산</span><i class="sw"></i></div>
+  </div>
+</div></section>
+
+<section class="band" style="padding-top:0"><div class="wrap">
+  <div class="head"><h2>네 가지 약속</h2></div>
+  <div class="prom">
+    <div class="pm"><div class="ic"><svg width="32" height="32"><use href="#i-hash"/></svg></div><b>번호는 받지 않습니다</b></div>
+    <div class="pm"><div class="ic"><svg width="32" height="32"><use href="#i-doc"/></svg></div><b>유언장과 구분해 안내합니다</b></div>
+    <div class="pm"><div class="ic"><svg width="32" height="32"><use href="#i-hand"/></svg></div><b>상품을 권하지 않습니다</b></div>
+    <div class="pm"><div class="ic"><svg width="32" height="32"><use href="#i-phone"/></svg></div><b>힘드실 땐 109를 안내합니다</b></div>
+  </div>
+</div></section>
+
+<section class="band" id="partner" style="background:var(--paper);border-block:1px solid var(--line)"><div class="wrap">
+  <div class="head"><h2>업체와 연결되는 방식</h2><p>가족이 고르고 동의한 업체에만, 필요한 정보만 전달됩니다.</p></div>
+  <div class="flow">
+    <div class="fs"><div class="ic"><svg width="28" height="28"><use href="#i-bell"/></svg></div><b>소식 등록</b></div>
+    <div class="fs"><div class="ic"><svg width="28" height="28"><use href="#i-key"/></svg></div><b>대리인 2인 승인</b></div>
+    <div class="fs hl"><div class="ic"><svg width="28" height="28"><use href="#i-doc"/></svg></div><b>장례 희망서</b></div>
+    <div class="fs"><div class="ic"><svg width="28" height="28"><use href="#i-flower"/></svg></div><b>장례·화장·장지</b></div>
+    <div class="fs"><div class="ic"><svg width="28" height="28"><use href="#i-box"/></svg></div><b>유품·법무·세무</b></div>
+  </div>
+  <div class="two">
+    <div><h3>입점 업종</h3><div class="chips" id="biz"></div><p style="color:var(--soft);font-size:16px">가격 공개 · 서류 심사 · 약정 체결 후 노출됩니다.</p></div>
+    <form id="partnerForm" novalidate>
+      <h3>입점 신청</h3>
+      <div class="grid2"><label for="p-name">업체명<input id="p-name" name="company" required autocomplete="organization"></label><label for="p-type">업종<select id="p-type" name="type" required><option value="">선택</option></select></label></div>
+      <div class="grid2"><label for="p-region">지역<input id="p-region" name="region" required placeholder="광주 남구"></label><label for="p-phone">연락처<input id="p-phone" name="phone" required inputmode="tel" autocomplete="tel"></label></div>
+      <label class="check"><input type="checkbox" name="agree" required> 상담용 정보 수집·이용 동의 (1년 후 파기)</label>
+      <div class="msg" role="status" aria-live="polite"></div>
+      <button class="btn main" type="submit">입점 신청</button>
+    </form>
+  </div>
+</div></section>
+
+<section class="band" id="apply"><div class="wrap two">
+  <div class="head"><h2>먼저 써보실 분을 모십니다</h2><p>파일럿 기간 무료. 자녀분이 대신 신청하셔도 됩니다.</p></div>
+  <form id="applyForm" novalidate>
+    <h3>사전 신청</h3>
+    <div class="grid2"><label for="a-who">신청자<select id="a-who" name="who" required><option value="">선택</option><option>본인</option><option>자녀·가족</option><option>복지관·기관</option></select></label><label for="a-name">이름<input id="a-name" name="name" required autocomplete="name"></label></div>
+    <div class="grid2"><label for="a-phone">연락처<input id="a-phone" name="phone" required inputmode="tel" autocomplete="tel"></label><label for="a-region">지역<input id="a-region" name="region" required placeholder="광주 남구"></label></div>
+    <label class="check"><input type="checkbox" name="agree" required> 안내용 정보 수집·이용 동의 (파일럿 후 파기)</label>
+    <div class="msg" role="status" aria-live="polite"></div>
+    <button class="btn main" type="submit">사전 신청</button>
+  </form>
+</div></section>
+
+<section class="band" style="padding-top:0"><div class="wrap" style="max-width:760px">
+  <div class="head"><h2>자주 묻는 질문</h2></div>
+  <div id="faqs"></div>
+</div></section>
+
+<section class="band adm hide" id="admin" style="background:var(--paper);border-top:1px solid var(--line)"><div class="wrap">
+  <div class="head"><h2>신청 관리</h2><p>대표님(편집 권한자)에게만 보이는 화면입니다.</p></div>
+  <div class="bar"><button class="btn sub small" id="admReload">새로고침</button><button class="btn sub small" id="admCopy">표 복사 (엑셀 붙여넣기용)</button><span id="admMsg" style="color:var(--soft);font-size:14px"></span></div>
+  <h3 style="margin:20px 0 8px">사전 신청 <span id="cS"></span></h3><div class="scroll"><table><thead><tr><th>접수일</th><th>신청자</th><th>이름</th><th>연락처</th><th>지역</th></tr></thead><tbody id="tS"></tbody></table></div>
+  <h3 style="margin:32px 0 8px">업체 입점 신청 <span id="cP"></span></h3><div class="scroll"><table><thead><tr><th>접수일</th><th>업체명</th><th>업종</th><th>지역</th><th>연락처</th></tr></thead><tbody id="tP"></tbody></table></div>
+</div></section>
+<footer><div class="wrap"><b>나날노트</b><span>나날서가 패밀리 · <a href="/app/" style="color:inherit">앱 미리보기</a> · <a href="/partner/" style="color:inherit">파트너센터</a></span></div></footer>
+
+<script>
+{
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+document.getElementById('wave').innerHTML=Array.from({length:18},(_,i)=>`<i style="animation-delay:${(i*0.07).toFixed(2)}s"></i>`).join('');
+const mods=[['i-book','인생 이야기'],['i-home','생활 정보'],['i-coin','재산 지도'],['i-heart','의료·돌봄',1],['i-flower','장례 희망',1],['i-cloud','디지털 유산'],['i-letter','가족에게 한마디']];
+document.getElementById('mods').innerHTML=mods.map(m=>`<div class="mod">${m[2]?'<svg class="lk" width="16" height="16" aria-label="원하실 때만"><use href="#i-lock"/></svg>':''}<svg width="34" height="34" aria-hidden="true"><use href="#${m[0]}"/></svg><b>${esc(m[1])}</b></div>`).join('');
+const biz=['장례식장','후불제 장례','봉안당·수목장','유품정리','법무·세무','부고·화환'];
+document.getElementById('biz').innerHTML=biz.map(b=>`<span>${esc(b)}</span>`).join('');
+document.getElementById('p-type').insertAdjacentHTML('beforeend',biz.concat(['기타']).map(b=>`<option>${esc(b)}</option>`).join(''));
+const faqs=[['유언장 효력이 있나요?','아니요. 가족에게 뜻을 전하는 기록이며, 법적 유언 방법은 따로 안내해 드립니다.'],['글을 못 써도 되나요?','네. 말씀만 하시면 됩니다.'],['업체가 제 정보를 보나요?','살아 계신 동안에는 볼 수 없습니다. 이후에도 가족이 동의한 업체에 필요한 항목만 전달됩니다.']];
+document.getElementById('faqs').innerHTML=faqs.map(f=>`<details><summary>${esc(f[0])}</summary><p>${esc(f[1])}</p></details>`).join('');
+let db=null,uid=null;
+(async()=>{try{if(window.claude&&claude.use){db=await claude.use('db');const u=await claude.use('user');if(u)uid=await u.id();}}catch(e){db=null}})();
+function wire(id,coll,label){
+  const f=document.getElementById(id),msg=f.querySelector('.msg'),btn=f.querySelector('button');
+  f.addEventListener('submit',async e=>{
+    e.preventDefault();msg.className='msg';
+    const miss=[...f.querySelectorAll('[required]')].find(el=>el.type==='checkbox'?!el.checked:!el.value.trim());
+    if(miss){msg.textContent='빈칸을 채워 주세요.';msg.className='msg err';miss.focus();return}
+    if(!db||!uid){msg.textContent='사전 신청은 곧 열립니다. 조금만 기다려 주세요.';msg.className='msg err';return}
+    const data=Object.fromEntries(new FormData(f));delete data.agree;
+    btn.disabled=true;btn.textContent='보내는 중…';
+    try{await db.doc(coll+'/'+uid).set({...data,agreed:true,at:new Date().toISOString()});msg.textContent='접수되었습니다. 곧 연락드리겠습니다.';msg.className='msg ok'}
+    catch(err){msg.textContent='보내지 못했습니다. 잠시 후 다시 시도해 주세요.';msg.className='msg err'}
+    btn.disabled=false;btn.textContent=label;
+  });
+}
+wire('applyForm','signups','사전 신청');wire('partnerForm','partners','입점 신청');
+let rowsS=[],rowsP=[];const d10=x=>String(x||'').slice(0,10);
+async function loadAdmin(){const m=document.getElementById('admMsg');m.textContent='불러오는 중…';
+  try{const [a,b]=await Promise.all([db.collection('signups').orderBy('at','desc').get(),db.collection('partners').orderBy('at','desc').get()]);
+    rowsS=a.docs.map(d=>d.data()||{});rowsP=b.docs.map(d=>d.data()||{});
+    document.getElementById('tS').innerHTML=rowsS.length?rowsS.map(r=>`<tr><td>${esc(d10(r.at))}</td><td>${esc(r.who)}</td><td>${esc(r.name)}</td><td>${esc(r.phone)}</td><td>${esc(r.region)}</td></tr>`).join(''):'<tr><td colspan="5">아직 없습니다</td></tr>';
+    document.getElementById('tP').innerHTML=rowsP.length?rowsP.map(r=>`<tr><td>${esc(d10(r.at))}</td><td>${esc(r.company)}</td><td>${esc(r.type)}</td><td>${esc(r.region)}</td><td>${esc(r.phone)}</td></tr>`).join(''):'<tr><td colspan="5">아직 없습니다</td></tr>';
+    document.getElementById('cS').textContent=`(${rowsS.length}건)`;document.getElementById('cP').textContent=`(${rowsP.length}건)`;m.textContent='';
+  }catch(e){m.textContent='불러오지 못했습니다.'}}
+function showAdmin(){const on=location.hash==='#admin'&&isAdm;document.getElementById('admin').classList.toggle('hide',!on);if(on)loadAdmin()}
+let isAdm=false;
+(async()=>{try{if(!(window.claude&&claude.use))return;const u=await claude.use('user');if(!u)return;isAdm=!!(await u.canEdit());if(isAdm){document.getElementById('admLink').classList.remove('hide');for(let i=0;i<20&&!db;i++)await new Promise(r=>setTimeout(r,250));showAdmin()}}catch(e){}})();
+window.addEventListener('hashchange',showAdmin);
+document.getElementById('admReload').onclick=()=>loadAdmin();
+document.getElementById('admCopy').onclick=async()=>{const t=['[사전 신청]','접수일\t신청자\t이름\t연락처\t지역',...rowsS.map(r=>[d10(r.at),r.who,r.name,r.phone,r.region].join('\t')),'','[입점 신청]','접수일\t업체명\t업종\t지역\t연락처',...rowsP.map(r=>[d10(r.at),r.company,r.type,r.region,r.phone].join('\t'))].join('\n');try{await navigator.clipboard.writeText(t);document.getElementById('admMsg').textContent='복사했습니다.'}catch(e){document.getElementById('admMsg').textContent='복사할 수 없는 화면입니다.'}};
+}
+</script>
+</body>
+</html>

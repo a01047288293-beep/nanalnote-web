@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta name="robots" content="noindex">
+<meta name="description" content="장례식장·추모공원·유품정리 업체용 관리 화면">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="나날노트">
+<meta property="og:title" content="나날노트 파트너센터 미리보기">
+<meta property="og:description" content="장례식장·추모공원·유품정리 업체용 관리 화면">
+<meta property="og:url" content="https://xn--910bqa26dz54h.com/partner/">
+<link rel="canonical" href="https://xn--910bqa26dz54h.com/partner/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Crect x='5' y='3' width='18' height='22' rx='2' fill='%231C3632'/%3E%3Cpath d='M8 3v22' stroke='%23C9A96E' stroke-width='1.2'/%3E%3Cpath d='M12 10h7M12 14h7M12 18h4' stroke='%23F4F0E8' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E">
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>나날 파트너센터</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@800&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<style>
+/* VOICE: 업무용, 단정하고 신뢰감 있게
+   IDEA: 장부와 접수대 — 요청이 들어오고, 희망서를 읽고, 견적을 보내는 데스크
+   PICTURE: 요청함 + 장례 희망서 카드, 대시보드 숫자와 주간 막대
+   COLOUR and TYPE: 아이보리, 숲녹색 사이드바, 금색 포인트 / 나눔명조 로고·제목 + 노토 산스
+   LAYOUT: 왼쪽 메뉴, 오른쪽 작업 영역, 휴대폰에선 위 메뉴 */
+:root{color-scheme:light dark;--bg:light-dark(#F4F0E8,#0E1312);--paper:light-dark(#FBF9F4,#151B1A);--ink:light-dark(#1A1F1E,#ECE7DC);--soft:light-dark(#575D5B,#A8AFAC);--line:light-dark(#DDD4C4,#28312F);--forest:#1C3632;--teal:light-dark(#1E3A36,#A9CFC7);--gold:light-dark(#9A7A42,#CBAE74);--goldsoft:#C9A96E;--mint:light-dark(#E7ECE8,#1B2A27);--warn:light-dark(#7A5A24,#D9BE86);--warnbg:light-dark(#F3ECDD,#2A2419);--red:light-dark(#9E2A1F,#FF9A8F)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 'Noto Sans KR',system-ui,sans-serif;overflow-x:clip;-webkit-font-smoothing:antialiased}
+h1,h2,h3{margin:0;line-height:1.35}h1{font-family:'Nanum Myeongjo',serif;font-weight:800;font-size:26px}h2{font-size:18px;font-weight:700}h3{font-size:16px;font-weight:700}
+p{margin:0}button{font-family:inherit}
+.shell{display:flex;flex-wrap:wrap;min-height:100vh}
+aside{flex:0 0 240px;background:var(--forest);color:#DCE4E1;padding:22px 16px;display:flex;flex-direction:column;gap:6px}
+.brand{display:flex;align-items:center;gap:10px;font-family:'Nanum Myeongjo',serif;font-weight:800;font-size:19px;color:#F4F0E8;margin-bottom:20px;padding:0 8px}
+.brand small{display:block;font-family:'Noto Sans KR',sans-serif;font-weight:400;font-size:12px;color:var(--goldsoft)}
+aside a{display:flex;align-items:center;gap:12px;min-height:46px;padding:0 12px;border-radius:6px;color:#DCE4E1;text-decoration:none;font-size:15px}
+aside a[aria-current=page]{background:rgba(201,169,110,.14);color:#F4F0E8;box-shadow:inset 2px 0 0 var(--goldsoft)}
+aside a .n{margin-left:auto;background:var(--goldsoft);color:#1A1F1E;border-radius:9px;font-size:12px;font-weight:700;padding:0 7px}
+aside .me{margin-top:auto;border-top:1px solid rgba(255,255,255,.1);padding:14px 8px 0;font-size:13px;color:#B9C8C3}
+main{flex:999 1 560px;padding:28px clamp(16px,3vw,40px);display:flex;flex-direction:column;gap:20px;max-width:1240px}
+.ph{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.ph p{color:var(--soft);font-size:14px;margin-top:4px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:20px}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.kpi{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:18px 20px;display:grid;gap:4px}
+.kpi span{font-size:13px;color:var(--soft)}.kpi b{font-family:'Nanum Myeongjo',serif;font-size:32px;font-weight:800;line-height:1.1}.kpi em{font-style:normal;font-size:12px;color:var(--teal)}
+.grid2{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:16px}
+.bars{display:flex;align-items:flex-end;gap:10px;height:170px;padding-top:10px}
+.bars div{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end}
+.bars i{width:100%;max-width:38px;background:var(--forest);border-radius:4px 4px 0 0;box-shadow:inset 0 2px 0 var(--goldsoft)}
+.bars span{font-size:12px;color:var(--soft)}.bars b{font-size:12px;font-weight:500}
+.rooms{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin-top:12px}
+.room{border:1px solid var(--line);border-radius:8px;padding:12px;display:grid;gap:6px;cursor:pointer;background:var(--bg);text-align:left;font-size:14px;color:var(--ink);min-height:72px}
+.room b{font-size:15px}.room.busy{background:var(--forest);color:#F4F0E8;border-color:var(--forest)}.room.busy span{color:var(--goldsoft)}
+.room span{font-size:12px;color:var(--teal)}
+.split{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:16px;align-items:start}
+.list{display:grid;gap:8px}
+.ri{display:grid;gap:4px;text-align:left;border:1px solid var(--line);background:var(--paper);border-radius:8px;padding:14px;cursor:pointer;color:var(--ink);font-size:14px}
+.ri[aria-pressed=true]{border-color:var(--gold);box-shadow:inset 3px 0 0 var(--gold)}
+.ri .t{display:flex;justify-content:space-between;gap:8px;align-items:center}.ri b{font-size:15px}.ri span{color:var(--soft);font-size:13px}
+.st{font-size:12px;border-radius:999px;padding:1px 9px;border:1px solid;white-space:nowrap}.st.new{color:var(--gold)}.st.ok{color:var(--teal)}.st.no{color:var(--soft)}
+.wish{border:1px solid var(--line);border-top:3px solid var(--forest);border-radius:6px;background:var(--paper);padding:26px;display:grid;gap:18px}
+.wish .hd{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:flex-start;border-bottom:1px solid var(--gold);padding-bottom:14px}
+.wish h2{font-family:'Nanum Myeongjo',serif;font-weight:800;font-size:22px}
+.wgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 20px}
+.wgrid div{display:grid;gap:2px}.wgrid span{font-size:12px;color:var(--soft)}.wgrid b{font-size:16px;font-weight:500}
+.consent{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--teal);background:var(--mint);border-radius:6px;padding:8px 12px}
+.btn{min-height:46px;padding:0 18px;border-radius:6px;border:0;font:500 15px 'Noto Sans KR',sans-serif;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;color:var(--ink);text-decoration:none}
+.btn.pri{background:var(--forest);color:#F4F0E8;box-shadow:inset 0 0 0 1px var(--goldsoft)}.btn.out{background:transparent;border:1px solid var(--gold)}.btn.ghost{background:transparent;color:var(--soft)}
+:is(button,a,input,select,textarea):focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.act{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+label{display:grid;gap:6px;font-size:14px;font-weight:500}
+input,select,textarea{font:16px 'Noto Sans KR',sans-serif;min-height:46px;padding:10px 12px;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:var(--ink);width:100%}
+.form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.form .full{grid-column:1/-1}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips label{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-weight:400;cursor:pointer;min-height:40px}
+.chips input{width:18px;min-height:18px;height:18px;accent-color:var(--forest)}
+.stepper{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0}
+.sp{text-align:center;position:relative;font-size:13px;color:var(--soft);display:grid;gap:8px;justify-items:center}
+.sp i{width:30px;height:30px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-style:normal;background:var(--paper);font-size:13px;z-index:1}
+.sp.done i{background:var(--forest);color:#F4F0E8;border-color:var(--forest)}.sp.now i{border-color:var(--gold);color:var(--gold);box-shadow:0 0 0 3px var(--warnbg)}.sp.now{color:var(--ink);font-weight:500}
+.sp:not(:last-child)::after{content:"";position:absolute;top:15px;left:50%;right:-50%;height:1px;background:var(--line)}.sp.done:not(:last-child)::after{background:var(--forest)}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th{text-align:left;font-size:13px;font-weight:500;color:var(--soft);border-bottom:1px solid var(--gold);padding:10px 8px}
+td{border-bottom:1px solid var(--line);padding:8px}td.num{text-align:right;white-space:nowrap}
+td input{min-height:40px}
+.scroll{overflow-x:auto}
+.note{font-size:12px;color:var(--soft)}
+.msg{font-size:14px;color:var(--teal)}
+.stars{color:var(--gold);letter-spacing:2px}
+.rv{border-top:1px solid var(--line);padding:14px 0;display:grid;gap:6px}.rv:first-child{border:0}
+.meter{height:8px;border-radius:4px;background:var(--line);overflow:hidden}.meter i{display:block;height:100%;background:var(--gold)}
+.empty{text-align:center;color:var(--soft);padding:40px 10px}
+.sample{font-size:12px;color:var(--warn);background:var(--warnbg);border-radius:4px;padding:2px 8px;white-space:nowrap}
+@media(max-width:1000px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.grid2,.split{grid-template-columns:minmax(0,1fr)}.wgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){aside{flex-basis:100%;flex-direction:row;flex-wrap:wrap;padding:12px}.brand{margin:0 auto 0 0;width:100%}aside a{flex:1 1 auto;justify-content:center;font-size:14px}aside a svg{display:none}aside .me{display:none}.form{grid-template-columns:minmax(0,1fr)}.stepper span{font-size:11px}}
+@media(max-width:480px){.kpis,.wgrid{grid-template-columns:minmax(0,1fr)}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-dash" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="5" rx="1"/><rect x="13" y="10" width="8" height="11" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/></g></symbol>
+<symbol id="i-inbox" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 13l3-8h12l3 8v6H3z"/><path d="M3 13h5l1 2h6l1-2h5"/></g></symbol>
+<symbol id="i-store" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 9l1-5h14l1 5M4 9v11h16V9M4 9h16M10 20v-6h4v6"/></g></symbol>
+<symbol id="i-tag" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 12V3h9l9 9-9 9z"/><circle cx="8" cy="8" r="1.5"/></g></symbol>
+<symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></g></symbol>
+</svg>
+<div class="shell">
+<aside>
+  <div class="brand"><svg width="26" height="26" viewBox="0 0 28 28" aria-hidden="true"><rect x="5" y="3" width="18" height="22" rx="2" fill="#F4F0E8"/><path d="M8 3v22" stroke="#C9A96E" stroke-width="1.2"/><path d="M12 10h7M12 14h7M12 18h4" stroke="#1C3632" stroke-width="1.4" stroke-linecap="round"/></svg><div>나날 파트너센터<small>제휴 업체 전용</small></div></div>
+  <nav id="nav" aria-label="메뉴" style="display:contents">
+    <a href="#dash"><svg width="20" height="20" aria-hidden="true"><use href="#i-dash"/></svg>대시보드</a>
+    <a href="#req"><svg width="20" height="20" aria-hidden="true"><use href="#i-inbox"/></svg>요청함<span class="n" id="newN"></span></a>
+    <a href="#info"><svg width="20" height="20" aria-hidden="true"><use href="#i-store"/></svg>업체 정보</a>
+    <a href="#price"><svg width="20" height="20" aria-hidden="true"><use href="#i-tag"/></svg>가격·패키지</a>
+    <a href="#review"><svg width="20" height="20" aria-hidden="true"><use href="#i-star"/></svg>후기·평가</a>
+  </nav>
+  <div class="me" id="me"></div>
+</aside>
+<main id="view"><p class="note">불러오는 중…</p></main>
+</div>
+<script>
+{
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const won=n=>Number(n||0).toLocaleString('ko-KR')+'원';
+const SAMPLE_REQ=[
+{id:'r1',when:'오늘 08:42',region:'광주 남구',type:'3일장',size:'100~150명',religion:'불교',method:'화장',place:'수목장 희망 (고향 담양)',sangjo:'없음',photo:'준비됨',note:'식사는 간소하게, 화환은 받지 않기를 원하심'},
+{id:'r2',when:'어제 21:10',region:'광주 서구',type:'1일장',size:'30명 이내',religion:'기독교',method:'화장',place:'○○ 봉안당 (생전 계약)',sangjo:'후불제 희망',photo:'준비됨',note:'교회 장례예배로 진행'},
+{id:'r3',when:'11월 22일',region:'광주 북구',type:'무빈소',size:'가족만',religion:'없음',method:'화장',place:'산분장',sangjo:'없음',photo:'없음',note:'조용히 가족끼리'}];
+const SAMPLE_REV=[{s:5,t:'안내받은 금액 그대로였고, 어머니가 남기신 희망서대로 준비해 주셨어요.',d:'11월'},{s:4,t:'빈소가 깔끔했습니다. 주차가 조금 불편했어요.',d:'10월'},{s:5,t:'경황이 없었는데 미리 정리된 내용이 있어 같은 설명을 반복하지 않아도 됐어요.',d:'10월'}];
+const blank=()=>({v:1,info:{name:'',type:'장례식장',addr:'',phone:'',rooms:4,fac:['주차','장애인 편의'],intro:''},stage:1,packages:[{name:'무빈소',total:3000000,meal:0,note:'안치·입관·발인'},{name:'1일장',total:6500000,meal:15000,note:'빈소 1일'},{name:'3일장',total:12000000,meal:15000,note:'빈소 3일'}],keep:3000,ehaneul:false,busy:[],dec:{}});
+let P=blank(),ref=null,loaded=false,saving=false,again=false,sel='r1';
+const V=document.getElementById('view');
+async function save(){if(!loaded)return;if(saving){again=true;return}saving=true;do{again=false;const b=JSON.parse(JSON.stringify(P));try{if(ref)await ref.set(b);else localStorage.setItem('nanal-partner',JSON.stringify(b))}catch(e){try{localStorage.setItem('nanal-partner',JSON.stringify(b))}catch(_){}}}while(again);saving=false}
+const status=r=>P.dec[r.id]?.s||'new';
+const ST={new:['새 요청','new'],ok:['견적 보냄','ok'],no:['거절','no']};
+function head(t,sub,extra=''){return`<div class="ph"><div><h1>${t}</h1>${sub?`<p>${sub}</p>`:''}</div>${extra}</div>`}
+function render(){
+  const r=(location.hash||'#dash').slice(1);
+  document.querySelectorAll('#nav a').forEach(a=>a.setAttribute('aria-current',a.hash==='#'+r?'page':'false'));
+  const n=SAMPLE_REQ.filter(x=>status(x)==='new').length;document.getElementById('newN').textContent=n||'';document.getElementById('newN').style.display=n?'':'none';
+  document.getElementById('me').textContent=(P.info.name||'업체명 미등록')+' · '+P.info.type;
+  ({dash,req,info,price,review}[r]||dash)();
+}
+function dash(){
+  const wk=[['월',3],['화',5],['수',2],['목',6],['금',4],['토',7],['일',3]],mx=7;
+  const sent=SAMPLE_REQ.filter(x=>status(x)==='ok').length;
+  V.innerHTML=head('대시보드','오늘 들어온 요청과 빈소 현황',`<span class="sample">예시 데이터</span>`)+
+  `<div class="kpis">
+    <div class="kpi"><span>새 요청</span><b>${SAMPLE_REQ.filter(x=>status(x)==='new').length}</b><em>가족 동의 완료 건만 표시</em></div>
+    <div class="kpi"><span>평균 첫 응답</span><b>18분</b><em>목표 30분 이내</em></div>
+    <div class="kpi"><span>가격 준수율</span><b>98%</b><em>유족 응답 기준</em></div>
+    <div class="kpi"><span>보낸 견적</span><b>${sent}</b><em>이번 달</em></div>
+  </div>
+  <div class="grid2">
+    <div class="card"><h2>이번 주 요청</h2><div class="bars" role="img" aria-label="요일별 요청 수">${wk.map(([d,v])=>`<div><b>${v}</b><i style="height:${v/mx*100}%"></i><span>${d}</span></div>`).join('')}</div></div>
+    <div class="card"><h2>빈소 현황</h2><p class="note">눌러서 사용 중 / 비어 있음을 바꿉니다. 가족 화면에 그대로 보입니다.</p><div class="rooms">${Array.from({length:P.info.rooms||0},(_,i)=>{const b=P.busy.includes(i);return`<button class="room${b?' busy':''}" data-r="${i}" aria-pressed="${b}"><b>${i+1}호실</b><span>${b?'사용 중':'비어 있음'}</span></button>`}).join('')}</div></div>
+  </div>
+  <div class="card" style="display:flex;gap:12px;align-items:center"><svg width="22" height="22" aria-hidden="true" style="color:var(--gold);flex:none"><use href="#i-lock"/></svg><p class="note" style="font-size:14px">어르신이 살아 계신 동안에는 어떤 정보도 업체에 오지 않습니다. 요청은 가족이 업체를 고르고 동의한 뒤에만 도착합니다.</p></div>`;
+  V.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{const i=+b.dataset.r;P.busy=P.busy.includes(i)?P.busy.filter(x=>x!==i):[...P.busy,i];save();dash()});
+}
+function req(){
+  const r=SAMPLE_REQ.find(x=>x.id===sel)||SAMPLE_REQ[0],d=P.dec[r.id]||{},s=status(r);
+  V.innerHTML=head('요청함','가족이 보낸 장례 희망서',`<span class="sample">예시 데이터</span>`)+
+  `<div class="split"><div class="list" role="list">${SAMPLE_REQ.map(x=>`<button class="ri" data-id="${x.id}" aria-pressed="${x.id===r.id}"><span class="t"><b>${esc(x.type)} · ${esc(x.region)}</b><span class="st ${ST[status(x)][1]}">${ST[status(x)][0]}</span></span><span>${esc(x.when)} · ${esc(x.size)}</span></button>`).join('')}</div>
+  <div class="wish"><div class="hd"><div><p class="note">나날 장례 희망서</p><h2>${esc(r.type)} · ${esc(r.method)}</h2></div><span class="consent"><svg width="16" height="16" aria-hidden="true"><use href="#i-lock"/></svg>가족 동의 · 대리인 2인 승인 완료</span></div>
+    <div class="wgrid">
+      <div><span>지역</span><b>${esc(r.region)}</b></div><div><span>규모</span><b>${esc(r.size)}</b></div><div><span>종교</span><b>${esc(r.religion)}</b></div>
+      <div><span>장법</span><b>${esc(r.method)}</b></div><div><span>모실 곳</span><b>${esc(r.place)}</b></div><div><span>상조</span><b>${esc(r.sangjo)}</b></div>
+      <div><span>영정사진</span><b>${esc(r.photo)}</b></div><div style="grid-column:span 2"><span>어르신이 남긴 뜻</span><b>${esc(r.note)}</b></div>
+    </div>
+    ${s==='new'?`<div class="act"><label style="flex:1 1 200px" for="amt">견적 총액 (원)<input id="amt" inputmode="numeric" placeholder="예: 6500000"></label><label style="flex:1 1 200px" for="pk">패키지<select id="pk">${P.packages.map((p,i)=>`<option value="${i}">${esc(p.name)} · ${won(p.total)}</option>`).join('')}</select></label>
+      <button class="btn pri" id="ok">견적 보내기</button><button class="btn out" id="no">정중히 거절</button></div><p class="note">등록한 가격과 다른 금액을 보내면 사유를 함께 적어야 하며, 유족에게 차이가 표시됩니다.</p>`:
+      `<p class="msg">${s==='ok'?`견적 ${won(d.amt)}을 보냈습니다. 가족의 답을 기다리는 중입니다.`:'거절했습니다. 가족에게는 다른 업체가 안내됩니다.'}</p><button class="btn ghost" id="undo" style="justify-self:start">되돌리기</button>`}
+  </div></div>`;
+  V.querySelectorAll('.ri').forEach(b=>b.onclick=()=>{sel=b.dataset.id;req()});
+  const pk=document.getElementById('pk'),amt=document.getElementById('amt');
+  if(pk){const fill=()=>{amt.value=P.packages[+pk.value]?.total||''};fill();pk.onchange=fill;
+    document.getElementById('ok').onclick=()=>{const v=parseInt(String(amt.value).replace(/\D/g,''),10);if(!v){amt.focus();return}P.dec[r.id]={s:'ok',amt:v};save();render()};
+    document.getElementById('no').onclick=()=>{P.dec[r.id]={s:'no'};save();render()}}
+  const u=document.getElementById('undo');if(u)u.onclick=()=>{delete P.dec[r.id];save();render()};
+}
+function info(){
+  const steps=['신청','정보 등록','서류 심사','약정 체결','공개'],I=P.info,F=['주차','장애인 편의','유족 숙소','종교 의식','외부 음식 허용','24시간 상담'];
+  V.innerHTML=head('업체 정보','가족 화면에 보이는 정보입니다')+
+  `<div class="card"><div class="stepper">${steps.map((s,i)=>`<div class="sp ${i<P.stage?'done':i===P.stage?'now':''}"><i>${i<P.stage?'✓':i+1}</i><span>${s}</span></div>`).join('')}</div></div>
+  <form class="card form" id="f" novalidate>
+    <label for="nm">업체명<input id="nm" value="${esc(I.name)}" required></label>
+    <label for="ty">업종<select id="ty">${['장례식장','후불제 장례','봉안당·수목장','유품정리','법무·세무','부고·화환'].map(t=>`<option ${t===I.type?'selected':''}>${t}</option>`).join('')}</select></label>
+    <label for="ad">주소<input id="ad" value="${esc(I.addr)}" placeholder="광주 남구 …"></label>
+    <label for="tel">대표 연락처<input id="tel" value="${esc(I.phone)}" inputmode="tel"></label>
+    <label for="rm">빈소 수<input id="rm" type="number" min="0" max="30" value="${esc(I.rooms)}"></label>
+    <div class="full"><p style="font-size:14px;font-weight:500;margin-bottom:6px">편의 시설</p><div class="chips">${F.map(x=>`<label><input type="checkbox" value="${x}" ${I.fac.includes(x)?'checked':''}>${x}</label>`).join('')}</div></div>
+    <label class="full" for="it">소개 (100자)<textarea id="it" maxlength="100" rows="2">${esc(I.intro)}</textarea></label>
+    <div class="full act"><button class="btn pri" type="submit">저장</button><p class="msg" id="sv" role="status"></p></div>
+  </form>`;
+  document.getElementById('f').onsubmit=e=>{e.preventDefault();const nm=document.getElementById('nm').value.trim();if(!nm){document.getElementById('nm').focus();return}
+    P.info={name:nm,type:document.getElementById('ty').value,addr:document.getElementById('ad').value.trim(),phone:document.getElementById('tel').value.trim(),rooms:Math.max(0,Math.min(30,+document.getElementById('rm').value||0)),fac:[...V.querySelectorAll('.chips input:checked')].map(c=>c.value),intro:document.getElementById('it').value.trim()};
+    P.busy=P.busy.filter(i=>i<P.info.rooms);if(P.stage<2)P.stage=2;save();render();document.getElementById('sv').textContent='저장했습니다. 다음은 서류 심사입니다.'};
+}
+function price(){
+  V.innerHTML=head('가격·패키지','가족이 비교하는 총액입니다. 등록 가격 외 금품은 받을 수 없습니다.')+
+  `<div class="card scroll"><table><thead><tr><th>패키지</th><th style="text-align:right">총액 (원)</th><th style="text-align:right">식대 1인 (원)</th><th>포함 내용</th><th></th></tr></thead><tbody>${P.packages.map((p,i)=>`<tr data-i="${i}"><td><input value="${esc(p.name)}" data-k="name" aria-label="패키지명"></td><td class="num"><input value="${esc(p.total)}" data-k="total" inputmode="numeric" style="text-align:right" aria-label="총액"></td><td class="num"><input value="${esc(p.meal)}" data-k="meal" inputmode="numeric" style="text-align:right" aria-label="식대"></td><td><input value="${esc(p.note)}" data-k="note" aria-label="포함 내용"></td><td><button class="btn ghost" data-del="${i}" aria-label="삭제">삭제</button></td></tr>`).join('')}</tbody></table>
+  <div class="act" style="margin-top:14px"><button class="btn out" id="add">패키지 추가</button></div></div>
+  <div class="card form"><label for="kp">안치료 (1일, 원)<input id="kp" value="${esc(P.keep)}" inputmode="numeric"></label>
+  <label class="chips" style="align-self:end"><label><input type="checkbox" id="eh" ${P.ehaneul?'checked':''}>e하늘에 공개한 가격과 같습니다</label></label>
+  <div class="full act"><button class="btn pri" id="sv">저장</button><p class="msg" id="svm" role="status"></p></div></div>`;
+  const num=v=>parseInt(String(v).replace(/\D/g,''),10)||0;
+  const read=()=>{V.querySelectorAll('tr[data-i]').forEach(tr=>{const p=P.packages[+tr.dataset.i];tr.querySelectorAll('input').forEach(inp=>{const k=inp.dataset.k;p[k]=k==='total'||k==='meal'?num(inp.value):inp.value.trim()})});P.keep=num(document.getElementById('kp').value);P.ehaneul=document.getElementById('eh').checked};
+  document.getElementById('add').onclick=()=>{read();P.packages.push({name:'새 패키지',total:0,meal:0,note:''});price()};
+  V.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{read();P.packages.splice(+b.dataset.del,1);price()});
+  document.getElementById('sv').onclick=()=>{read();save();document.getElementById('svm').textContent=P.ehaneul?'저장했습니다.':'저장했습니다. e하늘 공개 가격과 같은지 확인해 주세요.'};
+}
+function review(){
+  const avg=(SAMPLE_REV.reduce((a,r)=>a+r.s,0)/SAMPLE_REV.length).toFixed(1);
+  V.innerHTML=head('후기·평가','실제 이용이 확인된 유족만 후기를 남깁니다',`<span class="sample">예시 데이터</span>`)+
+  `<div class="kpis"><div class="kpi"><span>평점</span><b>${avg}</b><em class="stars">${'★'.repeat(Math.round(avg))}</em></div><div class="kpi"><span>가격 준수율</span><b>98%</b><div class="meter"><i style="width:98%"></i></div></div><div class="kpi"><span>후기 수</span><b>${SAMPLE_REV.length}</b><em>최근 3개월</em></div><div class="kpi"><span>나날 인증</span><b style="font-size:22px">${P.stage>=4?'공개 중':'심사 전'}</b><em>약정 체결 후 공개</em></div></div>
+  <div class="card">${SAMPLE_REV.map(r=>`<div class="rv"><span class="stars" aria-label="${r.s}점">${'★'.repeat(r.s)}${'☆'.repeat(5-r.s)}</span><p>${esc(r.t)}</p><span class="note">${esc(r.d)} · 유족</span></div>`).join('')}</div>
+  <p class="note">등록 가격 외 금품 요구가 확인되면 노출이 즉시 중단되고, 두 번째에는 퇴출됩니다.</p>`;
+}
+window.addEventListener('hashchange',render);
+(async()=>{
+  const t=setTimeout(()=>{if(!loaded){loaded=true;render()}},10000);
+  const local=()=>{try{const l=localStorage.getItem('nanal-partner');if(l)P=Object.assign(blank(),JSON.parse(l))}catch(_){}};
+  try{if(window.claude&&claude.use){const [db,u]=await Promise.all(['db','user'].map(n=>claude.use(n).catch(()=>null)));const uid=u?await u.id():null;
+    if(db&&uid){ref=db.doc('data/users/'+uid+'/partner');const s=await ref.get();if(s.exists)P=Object.assign(blank(),s.data())}else local()}else local()}catch(e){}
+  clearTimeout(t);loaded=true;render();
+})();
+}
+</script>
+</body>
+</html>
