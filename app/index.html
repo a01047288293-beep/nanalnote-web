@@ -132,6 +132,7 @@ html.fs1{zoom:1.12}html.fs2{zoom:1.25}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 h1,h2,h3,p,li,label,.q,.big{word-break:keep-all;overflow-wrap:anywhere}h1,h2,h3,.q{text-wrap:balance}
 .nlogo{width:auto;display:block;flex:none}
+.near{text-decoration:none;color:inherit;border-color:var(--gold)}
 </style>
 </head>
 <body>
@@ -431,6 +432,8 @@ function note(){
   <p class="banner">나날노트는 유언장이 아닙니다. 법적 효력이 필요한 내용은 따로 안내해 드려요.</p>`;
   document.getElementById('nShare').onclick=shareFamily;document.getElementById('nPrint').onclick=printNote;
 }
+// 노트 항목에서 바로 지도 연결
+const NEAR={care:['g=care','병원·요양병원·요양원·치매안심센터'],living:['c=clinic','동네 의원·약국'],funeral:['g=after','장례식장·추모공원·화장장'],assets:['g=legal','세무사·법무사·보험사']};
 function noteDetail(k){
   const m=modOf(k);if(!m){location.hash='#note';return}
   const its=S.items.filter(i=>i.module===k);
@@ -438,7 +441,7 @@ function noteDetail(k){
   <div class="hello"><div class="mod" style="border:0;background:none;padding:0"><div class="mini">${mini(allowed(m)?progress(m):0)}<span>${ic(allowed(m)?m.ic:'i-lock',26)}</span></div></div><h1>${esc(m.name)}</h1></div>
   ${!allowed(m)?`<div class="card"><p class="big">준비되시면 시작해요</p><p class="muted">이 이야기는 원하실 때만 여쭤봐요.</p><button class="btn pri" id="unlock">이 이야기도 해 볼게요</button></div>`:
   `<div class="card">${m.fields.map(f=>{const its2=its.filter(i=>i.field===f);return its2.length?its2.map(i=>`<div class="item"><span class="f">${esc(f)} ${i.status==='확정'?'<span class="badge y">확정</span>':'<span class="badge n">확인 전</span>'}</span><span class="v">${esc(i.value)}</span><label class="sw">가족에게 보여주기<input type="checkbox" data-vis="${esc(i.id)}" ${i.visible?'checked':''}></label></div>`).join(''):`<div class="item"><span class="f">${esc(f)}</span><span class="v muted">아직 비어 있어요</span></div>`}).join('')}</div>
-  <a class="btn out" href="#talk">${ic('i-mic',22)}이어서 이야기하기</a>`}`;
+  <a class="btn out" href="#talk">${ic('i-mic',22)}이어서 이야기하기</a>${NEAR[k]?`<a class="card near" href="https://xn--910bqa26dz54h.com/network/?${NEAR[k][0]}" target="_blank" rel="noopener"><span class="lab">가까운 곳 찾기</span><p class="big" style="margin:0">${NEAR[k][1]} →</p></a>`:''}`}`;
   const u=document.getElementById('unlock');if(u)u.onclick=()=>{S.profile.consent[k]=true;if(!S.pending||S.pending.module!==k)S.pending={module:k,field:m.fields[0]};save();noteDetail(k)};
   V.querySelectorAll('[data-vis]').forEach(c=>c.onchange=()=>{const i=S.items.find(x=>x.id===c.dataset.vis);if(i){i.visible=c.checked;save()}});
 }
