@@ -56,7 +56,7 @@ main{flex:1;padding:22px 18px 28px;display:flex;flex-direction:column;gap:18px}
 input,textarea{font:17px 'Noto Sans KR',sans-serif;min-height:56px;padding:12px 14px;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:var(--ink);width:100%}
 textarea{resize:vertical}
 label{display:grid;gap:8px;font-weight:500}
-nav.tabs{position:sticky;bottom:0;z-index:4;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));background:var(--paper);border-top:1px solid var(--line)}
+nav.tabs{position:sticky;bottom:0;z-index:4;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));background:var(--paper);border-top:1px solid var(--line)}
 nav.tabs a{min-height:68px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:14px;color:var(--soft);text-decoration:none;border-top:2px solid transparent;position:relative}
 nav.tabs a[aria-current=page]{color:var(--teal);font-weight:700;border-top-color:var(--gold)}
 nav.tabs .dot{position:absolute;top:10px;left:calc(50% + 8px);min-width:18px;height:18px;border-radius:9px;background:var(--gold);color:#1A1F1E;font-size:11px;font-weight:700;display:grid;place-items:center;padding:0 4px}
@@ -133,6 +133,9 @@ html.fs1{zoom:1.12}html.fs2{zoom:1.25}
 h1,h2,h3,p,li,label,.q,.big{word-break:keep-all;overflow-wrap:anywhere}h1,h2,h3,.q{text-wrap:balance}
 .nlogo{width:auto;display:block;flex:none}
 .near{text-decoration:none;color:inherit;border-color:var(--gold)}
+.worryCard{text-decoration:none;color:inherit;border-left:3px solid var(--gold)}
+.helpc{background:var(--mint);border-radius:12px;padding:14px 16px;display:grid;gap:10px;font-size:16px}.helpc .row{gap:8px;display:grid;grid-template-columns:1fr}.helpc .btn{min-height:50px;font-size:16px}
+.wnote{font-size:14px;color:var(--soft);text-align:center;margin:0}
 </style>
 </head>
 <body>
@@ -168,13 +171,13 @@ h1,h2,h3,p,li,label,.q,.big{word-break:keep-all;overflow-wrap:anywhere}h1,h2,h3,
     <a href="#home"><svg width="26" height="26" aria-hidden="true"><use href="#i-sun"/></svg>오늘</a>
     <a href="#talk"><svg width="26" height="26" aria-hidden="true"><use href="#i-chat"/></svg>대화</a>
     <a href="#note"><svg width="26" height="26" aria-hidden="true"><use href="#i-book"/></svg>노트</a>
+    <a href="#worry"><svg width="26" height="26" aria-hidden="true"><use href="#i-heart"/></svg>마음</a>
     <a href="#check" id="checkTab"><svg width="26" height="26" aria-hidden="true"><use href="#i-check"/></svg>확인</a>
   </nav>
 </div>
 <script>
 {
 const MODS=[
-{k:'life',name:'인생 이야기',ic:'i-book',fields:['고향','첫 일','자랑스러운 일','힘들었던 때','배우자·가족 이야기']},
 {k:'living',name:'생활 정보',ic:'i-home',fields:['비상 연락처','단골 병원·약국','복용 약','집 열쇠·반려동물']},
 {k:'assets',name:'재산 지도',ic:'i-coin',fields:['금융','보험','부동산','빚·빌려준 돈','정기 결제','중요 서류 위치']},
 {k:'care',name:'의료·돌봄',ic:'i-heart',lock:1,fields:['지내고 싶은 곳','연명의료 생각','대신 결정할 사람','장기기증']},
@@ -189,7 +192,7 @@ const QB={'고향':'어릴 때 살던 동네는 어떤 곳이었어요?','첫 �
 '사진':'휴대폰에 있는 사진들은 나중에 어떻게 했으면 좋겠어요?','메신저·SNS 계정':'카카오톡이나 밴드 같은 계정은 지울까요, 남겨둘까요? 비밀번호는 말씀 안 하셔도 돼요.','유료 구독':'매달 돈이 나가는 앱이나 서비스가 있으세요?',
 '가족에게 남기는 말':'가족에게 한마디 남긴다면 뭐라고 하고 싶으세요?'};
 // ── 엔진(nanal-ai)과 같은 규칙: schema/nanal-schema.json v3 에서 생성 ──
-const META={"life": {"minDay": 0, "sensitive": false}, "living": {"minDay": 1, "sensitive": false}, "assets": {"minDay": 7, "sensitive": true}, "care": {"minDay": 14, "sensitive": true}, "funeral": {"minDay": 21, "sensitive": true}, "digital": {"minDay": 3, "sensitive": false}, "family": {"minDay": 5, "sensitive": false}};
+const META={"living": {"minDay": 0, "sensitive": false}, "assets": {"minDay": 7, "sensitive": true}, "care": {"minDay": 14, "sensitive": true}, "funeral": {"minDay": 21, "sensitive": true}, "digital": {"minDay": 3, "sensitive": false}, "family": {"minDay": 5, "sensitive": false}};
 const DEEP=new Set(["힘들었던 때", "금융", "보험", "부동산", "빚·빌려준 돈", "지내고 싶은 곳", "연명의료 생각", "대신 결정할 사람", "장기기증", "종교·장례 형식", "장례 규모", "화장·매장", "모실 곳", "부고 명단", "제사", "가족에게 남기는 말"]),LOC=new Set(["금융", "보험", "부동산", "빚·빌려준 돈", "정기 결제", "중요 서류 위치", "메신저·SNS 계정", "유료 구독"]);
 const FK={"life": {"고향": "hometown", "첫 일": "first_job", "자랑스러운 일": "proudest", "힘들었던 때": "hardest", "배우자·가족 이야기": "family_story"}, "living": {"비상 연락처": "emergency_contact", "단골 병원·약국": "clinic", "복용 약": "medication", "집 열쇠·반려동물": "keys_pets"}, "assets": {"금융": "finance", "보험": "insurance", "부동산": "property", "빚·빌려준 돈": "debts", "정기 결제": "subscriptions", "중요 서류 위치": "documents"}, "care": {"지내고 싶은 곳": "care_place", "연명의료 생각": "life_support", "대신 결정할 사람": "decision_maker", "장기기증": "organ_donation"}, "funeral": {"종교·장례 형식": "form", "장례 규모": "scale", "화장·매장": "burial", "모실 곳": "resting_place", "부고 명단": "notify", "가입 상조": "sangjo", "제사": "memorial"}, "digital": {"사진": "photos", "메신저·SNS 계정": "accounts", "유료 구독": "paid_subs"}, "family": {"가족에게 남기는 말": "message"}}; // 서버 API 키 (예: funeral → 화장·매장 = burial)
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -233,7 +236,7 @@ const progress=m=>Math.round(m.fields.filter(f=>S.items.some(i=>i.module===m.k&&
 const total=()=>Math.round(MODS.reduce((a,m)=>a+progress(m),0)/MODS.length);
 const modOf=k=>MODS.find(m=>m.k===k);
 const pend=()=>S.items.filter(i=>i.status!=='확정'||i.pending).sort((a,b)=>(!!b.pending)-(!!a.pending));
-function ring(){const r=50,C=2*Math.PI*r,seg=C/7,g=6;return`<svg viewBox="0 0 118 118" aria-hidden="true"><g transform="rotate(-90 59 59)" fill="none" stroke-width="9">${MODS.map((m,i)=>{const len=seg-g,fill=len*progress(m)/100,off=-(i*seg);return`<circle cx="59" cy="59" r="${r}" stroke="var(--line)" stroke-dasharray="${len} ${C-len}" stroke-dashoffset="${off}"/>${fill>0?`<circle cx="59" cy="59" r="${r}" stroke="var(--gold)" stroke-linecap="butt" stroke-dasharray="${fill} ${C-fill}" stroke-dashoffset="${off}"/>`:''}`}).join('')}</g></svg>`}
+function ring(){const r=50,C=2*Math.PI*r,seg=C/MODS.length,g=6;return`<svg viewBox="0 0 118 118" aria-hidden="true"><g transform="rotate(-90 59 59)" fill="none" stroke-width="9">${MODS.map((m,i)=>{const len=seg-g,fill=len*progress(m)/100,off=-(i*seg);return`<circle cx="59" cy="59" r="${r}" stroke="var(--line)" stroke-dasharray="${len} ${C-len}" stroke-dashoffset="${off}"/>${fill>0?`<circle cx="59" cy="59" r="${r}" stroke="var(--gold)" stroke-linecap="butt" stroke-dasharray="${fill} ${C-fill}" stroke-dashoffset="${off}"/>`:''}`}).join('')}</g></svg>`}
 function mini(p){const r=28,C=2*Math.PI*r;return`<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="${r}" fill="none" stroke="var(--line)" stroke-width="4"/><circle cx="32" cy="32" r="${r}" fill="none" stroke="var(--gold)" stroke-width="4" stroke-dasharray="${C*p/100} ${C}" transform="rotate(-90 32 32)" stroke-linecap="round"/></svg>`}
 
 function render(){
@@ -243,7 +246,7 @@ function render(){
   const shell=!!S.profile.name;document.getElementById('tabs').classList.toggle('hide',!shell);document.getElementById('famBtn').classList.toggle('hide',!shell);document.getElementById('setBtn').classList.toggle('hide',!shell);
   if(!shell)return onboard();
   if(r.startsWith('note-'))return noteDetail(r.slice(5));
-  ({home,talk,note,check,family,settings}[r]||home)();
+  ({home,talk,note,check,family,settings,worry}[r]||home)();
 }
 function onboard(){
   const st=ob.step,dots=`<div class="steps">${[0,1,2].map(i=>`<i class="${i<=st?'on':''}"></i>`).join('')}</div>`;
@@ -260,11 +263,12 @@ function home(){
   V.innerHTML=`<div class="hello"><div class="ring">${ring()}<b>${total()}%</b><small>나날노트</small></div><div><p class="muted">${esc(new Date().toLocaleDateString('ko-KR',{month:'long',day:'numeric',weekday:'long'}))}</p><h1>${esc(S.profile.name)},<br>안녕하세요</h1></div></div>
   ${S.after&&S.after.reported&&!S.after.opened?`<div class="card" style="border-color:var(--red)"><span class="lab" style="color:var(--red)">확인해 주세요</span><p style="font-size:19px">가족이 나날노트 공개 절차를 시작했어요. 괜찮으시면 아래를 눌러 주세요. 바로 취소됩니다.</p><button class="btn pri" id="alive">저 괜찮아요 — 취소하기</button></div>`:''}
   <div class="card forest"><span class="lab">오늘의 이야기${nf?' · '+esc(modOf(nf.module).name):''}</span><p class="q">${esc(q)}</p><a class="btn pri" href="#talk">${ic('i-mic',26)}말로 대답하기</a></div>
+  <a class="card worryCard" href="#worry"><span class="lab">고민 상담</span><p style="font-size:19px;margin:0">마음이 무거운 날엔 그냥 이야기하세요. 저장되지 않아요.</p></a>
   <div class="card"><span class="lab">오늘 기분</span><div class="mood">${[['좋음','i-sun'],['보통','i-cloud'],['힘듦','i-heart']].map(([v,i])=>`<button data-m="${v}" aria-pressed="${md===v}">${ic(i,26)}${v==='좋음'?'좋아요':v==='보통'?'그저 그래요':'힘들어요'}</button>`).join('')}</div></div>
   ${msg?`<div class="card"><span class="lab">가족의 응원</span><p style="font-size:19px">${esc(msg.text)}</p></div>`:''}
   <div class="card stat"><div><b>${S.days.length}</b><span>대화한 날</span></div><div><b>${S.items.length}</b><span>적힌 항목</span></div><div><b>${pend().length}</b><span>확인 대기</span></div></div>`;
   const al=document.getElementById('alive');if(al)al.onclick=()=>{S.after=null;save();home()};
-  V.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{S.mood={date:today(),val:b.dataset.m};save();home();if(b.dataset.m==='힘듦'){location.hash='#talk'}});
+  V.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{S.mood={date:today(),val:b.dataset.m};save();home();if(b.dataset.m==='힘듦'){location.hash='#worry'}});
 }
 function bubble(m,last){if(m.role==='chip')return`<div class="chip">${ic('i-pen',15)}${esc(m.text)}</div>`;if(m.role==='alert')return`<div class="alert" role="alert">${esc(m.text)}${m.call?`<a class="btn call" href="tel:${m.call}">${m.call} 전화하기</a>`:''}</div>`;return`<div class="b ${m.role}${last?' last':''}">${esc(m.text)}</div>`}
 function push(role,text,extra){S.chat.push(Object.assign({role,text,date:today()},extra||{}));if(S.chat.length>80)S.chat=S.chat.slice(-80)}
@@ -382,6 +386,68 @@ function basicReply(text){const n=S.profile.name,pf=S.pending,t=text.trim(),m=pf
   const nx=candidates().find(c=>c.field!==pf.field)||null;setPending(nx);
   say(`${THANKS[(S.items.length+S.days.length)%THANKS.length]} ${nx?QB[nx.field]:'오늘 준비한 질문은 다 했어요. 일요일에 확인 탭에서 한 번만 봐 주세요.'}`)}
 function skipQuiet(){const c=S.pending,n=candidates().find(x=>!c||x.field!==c.field)||null;setPending(n);push('ai',n?`괜찮아요, 나중에 여쭐게요. 그럼 이건 어떠세요? ${QB[n.field]}`:'괜찮아요. 오늘은 여기까지 해요.')}
+
+// ── 고민 상담: 노트에 저장하지 않고, 가족에게도 보이지 않는 대화 (화면을 닫으면 사라짐) ──
+let W=[],wbusy=false,wtyping=false;
+const WOPEN=n=>`${n}, 무슨 일이든 편하게 말씀하세요. 여기서 나눈 이야기는 저장되지 않고, 가족에게도 보이지 않아요.`;
+function helpCard(){return{role:'help'}}
+function wbubble(m,last){
+  if(m.role==='help')return`<div class="helpc"><b>사람과도 이야기해 보세요</b><span>전문 상담 선생님이 24시간 들어 드려요. 전화비 외에 돈이 들지 않아요.</span><div class="row"><a class="btn pri" href="tel:15770199">1577-0199 정신건강 상담</a><a class="btn out" href="https://xn--910bqa26dz54h.com/network/?c=mental" target="_blank" rel="noopener">가까운 상담 센터</a></div></div>`;
+  if(m.role==='alert')return`<div class="alert" role="alert">${esc(m.text)}<a class="btn call" href="tel:${m.call}">${m.call} 전화하기</a>${m.call==='109'?'<a class="btn call" style="background:transparent;color:var(--red);border:1px solid var(--red)" href="tel:15770199">1577-0199 정신건강 상담</a>':''}</div>`;
+  return`<div class="b ${m.role}${last?' last':''}">${esc(m.text)}</div>`}
+function worry(){
+  if(!W.length)W.push({role:'ai',text:WOPEN(S.profile.name)});
+  const li=W.map(m=>m.role).lastIndexOf('ai');
+  V.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><span class="lab">고민 상담</span><button class="btn ghost" id="wclr">대화 지우기</button></div>
+  ${sample?'':'<p class="wnote">미리보기라 정해진 말로만 답해요. 정식 오픈 때 AI가 들어 드려요.</p>'}
+  <div class="chat" id="wchat" aria-live="polite">${W.map((m,i)=>wbubble(m,i===li)).join('')}${wbusy?'<div class="think" aria-label="생각하는 중"><i></i><i></i><i></i></div>':''}</div>
+  <div class="dock">
+    ${dict&&!wtyping?`<button class="mic ${D.on?'on':''}" id="mic" aria-label="${D.on?'말하기 끝내기':'눌러서 말하기'}" ${wbusy?'disabled':''}>${ic(D.on?'i-stop':'i-mic',40)}</button><p class="miclab" id="miclab">${D.on?'다 말씀하시면 한 번 더 누르세요':'누르고 말씀하세요'}</p>`:''}
+    <div class="typer ${dict&&!wtyping?'hide':''}"><textarea id="wans" rows="1" placeholder="여기에 써 주세요" aria-label="고민 이야기"></textarea><button class="btn pri" id="wsend" aria-label="보내기" style="min-width:64px" ${wbusy?'disabled':''}>${ic('i-send',24)}</button></div>
+    ${dict?`<button class="btn ghost" id="wtw">${ic(wtyping?'i-mic':'i-pen',20)}${wtyping?'말로 하기':'글로 쓰기'}</button>`:''}
+    <p class="wnote">저장되지 않아요 · 가족에게 보이지 않아요</p>
+  </div>`;
+  {const ch=document.getElementById('wchat'),dk=V.querySelector('.dock'),last=ch.lastElementChild;if(last){last.style.scrollMarginBottom=((dk?dk.offsetHeight:0)+76)+'px';last.scrollIntoView({block:'end'})}}
+  const $=id=>document.getElementById(id);
+  $('wclr').onclick=()=>{W=[];worry();toast('대화를 지웠어요')};
+  $('wsend').onclick=()=>wsend($('wans').value);
+  $('wans').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();wsend(e.target.value)}};
+  if($('wtw'))$('wtw').onclick=()=>{wtyping=!wtyping;worry();if(wtyping)$('wans').focus()};
+  if($('mic'))$('mic').onclick=()=>{if(D.on){dict.stop().then(()=>{if(D.text.trim())wsend(D.text)}).catch(()=>{})}else{D.text='';try{tts&&tts.stop()}catch(_){}dict.start().catch(()=>{wtyping=true;worry()})}};
+}
+// AI가 없을 때: 판단하지 않고 들어 주는 정해진 말
+const WBASIC=[[/외로|외롭|쓸쓸|적적|혼자/, '혼자라고 느끼실 때가 많으시군요. 그 마음이 참 시리셨겠어요. 요즘 제일 생각나는 사람이 있으세요?'],
+ [/아프|통증|쑤시|못\s?자|잠이|불면/, '몸이 편치 않으면 마음까지 지치지요. 요즘 제일 힘든 때가 언제예요?'],
+ [/돈|생활비|빚|월세|연금|병원비/, '살림 걱정은 밤이 되면 더 무겁게 느껴지지요. 혼자 끙끙 앓지 마시고 조금 더 들려주세요.'],
+ [/아들|딸|자식|며느리|사위|손주|애들/, '자식 일은 나이가 들어도 마음에서 내려놓기 어렵지요. 어떤 일이 제일 마음에 걸리세요?'],
+ [/남편|아내|영감|할멈|집사람|바깥양반/, '가장 가까운 사람 일이라 더 마음이 쓰이시겠어요. 그때 마음이 어떠셨어요?'],
+ [/그립|보고\s?싶|떠났|돌아가/, '많이 그리우시겠어요. 그분 이야기를 조금 더 들려주시겠어요?'],
+ [/화가|화나|섭섭|서운|속상/, '많이 서운하셨겠어요. 그런 마음이 드시는 게 당연해요. 어떤 일이 있었어요?']];
+const WDEF=['그러셨군요. 그 이야기 조금만 더 들려주시겠어요?','말씀해 주셔서 고마워요. 그때 마음이 어떠셨어요?','많이 애쓰셨네요. 지금은 어떤 마음이 제일 크세요?'];
+async function wsend(raw){
+  raw=String(raw||'').trim();if(!raw||wbusy)return;const flag=risk(raw);D.text='';
+  W.push({role:'me',text:mask(raw)});if(W.length>60)W=W.slice(-60);
+  if(flag){W.push({role:'alert',text:ALERT[flag.k](S.profile.name),call:flag.call});if(flag.k==='위기')W.push(helpCard());worry();speakW();return}
+  const nMe=W.filter(m=>m.role==='me').length;
+  if(!sample){const hit=WBASIC.find(([re])=>re.test(raw));W.push({role:'ai',text:hit?hit[1]:WDEF[nMe%WDEF.length]});if(nMe%4===0)W.push(helpCard());worry();speakW();return}
+  wbusy=true;worry();
+  const hist=W.filter(m=>m.role==='ai'||m.role==='me').slice(-12).map(m=>(m.role==='ai'?'상담: ':'어르신: ')+m.text).join('\n');
+  const prompt=`당신은 '나날노트'의 고민 상담 상대입니다. 어르신의 마음 이야기를 듣습니다.
+[원칙] 해요체. 먼저 어르신의 감정을 그대로 받아 주는 한 문장, 그다음 부드러운 질문 하나. 전체 2~3문장, 120자 안팎.
+판단·훈계·해결책 강요를 하지 않습니다. 가족을 탓하거나 편들지 않습니다. 어려운 말을 쓰지 않습니다.
+진단·약·치료에 대한 판단, 돈·투자·법률 조언을 하지 않습니다. 누구냐고 물으면 AI라고 솔직히 말합니다.
+[도움 연결] 같은 괴로움이 되풀이되거나, 잠·식사가 무너졌거나, 오래 우울하다는 말이 나오면 help를 true로 하고 답 끝에 "전문 상담 선생님과도 이야기해 보시면 좋겠어요"라고 부드럽게 권합니다.
+[즉시] 살고 싶지 않다, 스스로를 해치고 싶다는 뜻이 보이면 crisis를 true로 합니다.
+[어르신] 호칭: ${S.profile.name}
+[대화]
+${hist}
+JSON 하나만 출력: {"reply":"...","help":false,"crisis":false}`;
+  try{let out;if(sample.json)out=await sample.json(prompt,{cache:false});else{const r=await sample(prompt,{cache:false});out=JSON.parse((r.text.match(/\{[\s\S]*\}/)||['{}'])[0])}
+    if(out&&out.crisis){W.push({role:'alert',text:ALERT['위기'](S.profile.name),call:'109'});W.push(helpCard())}
+    else{const rep=String((out&&out.reply)||'').slice(0,300);W.push({role:'ai',text:okReply(rep)?rep:`${S.profile.name}, 말씀 잘 들었어요. 조금만 더 들려주시겠어요?`});if(out&&out.help)W.push(helpCard())}
+  }catch(e){W.push({role:'ai',text:'제가 잠깐 놓쳤어요. 한 번만 다시 말씀해 주시겠어요?'})}
+  wbusy=false;if((location.hash||'')==='#worry')worry();speakW()}
+function speakW(){if(!tts||!S.tts)return;const m=[...W].reverse().find(x=>x.role==='ai'||x.role==='alert');if(m)tts.speak(m.text).catch(()=>{})}
 
 // ── 인쇄 · 가족에게 보내기 ──
 function printNote(){const pa=document.getElementById('printArea');const d=new Date().toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric'});
@@ -524,6 +590,7 @@ window.addEventListener('hashchange',()=>{if(location.hash==='#check')ci=0;rende
     }else local();
   }catch(e){}
   if(!dict)dict=webDict();if(!tts)tts=webTts();wireDict();
+  {const n=(S.items||[]).length;S.items=(S.items||[]).filter(i=>modOf(i.module));if(S.pending&&!modOf(S.pending.module))S.pending=null;if(n!==S.items.length)setTimeout(save,0)}
   if(!S.profile.since)S.profile.since=S.days[0]||today();if(!S.asked)S.asked=[];S.v=3;applyFs();
   clearTimeout(timer);loaded=true;render();
 })();
